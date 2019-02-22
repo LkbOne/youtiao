@@ -1,0 +1,16 @@
+package com.example.phoebe.youtiao.controler.arg.Expenses;
+
+import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.StringUtils;
+
+public class GetExpensesByIdArg {
+    @ApiModelProperty(name = "expensesId", notes = "花费id")
+    String expensesId;
+
+    public boolean isWrongParams(){
+        if (StringUtils.isEmpty(expensesId)){
+            return true;
+        }
+        return false;
+    }
+}

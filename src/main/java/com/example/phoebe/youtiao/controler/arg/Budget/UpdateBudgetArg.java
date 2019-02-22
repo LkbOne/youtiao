@@ -8,9 +8,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AddBudgetArg implements Serializable {
+public class UpdateBudgetArg implements Serializable {
 
-    @ApiModelProperty(name = "budget", notes = "预算金额")
+    @ApiModelProperty(name = "budgetId", notes = "预算id")
+    String budgetId;
+
+    @ApiModelProperty(name = "budget", notes = "预算")
     Float budget;
 
     @ApiModelProperty(name = "type", notes = "预算类型（旅游，吃喝等）")
@@ -23,7 +26,9 @@ public class AddBudgetArg implements Serializable {
     Date endTime;
 
     public boolean isWrongParams(){
+        if(StringUtils.isEmpty(budgetId)){
+            return false;
+        }
         return true;
     }
-
 }
