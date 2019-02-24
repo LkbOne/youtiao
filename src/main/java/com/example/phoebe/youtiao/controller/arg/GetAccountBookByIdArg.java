@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler.arg;
+package com.example.phoebe.youtiao.controller.arg;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,12 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 
 @Data
-public class DeleteAccountBookByIdArg implements Serializable {
-    @ApiModelProperty(value = "id", notes = "账本id")
-    String id;
+public class GetAccountBookByIdArg implements Serializable {
+    @ApiModelProperty(value = "accountBookId", notes = "账本id")
+    String accountBookId;
 
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(id)){
+        if(StringUtils.isEmpty(accountBookId)){
             return true;
         }
         return false;

@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler.arg.Expenses;
+package com.example.phoebe.youtiao.controller.arg.Expenses;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

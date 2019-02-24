@@ -1,16 +1,14 @@
-package com.example.phoebe.youtiao.controler;
+package com.example.phoebe.youtiao.controller;
 
 import com.example.phoebe.youtiao.api.BudgetService;
+import com.example.phoebe.youtiao.api.vo.budget.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
-import com.example.phoebe.youtiao.controler.arg.AddAccountBookArg;
-import com.example.phoebe.youtiao.controler.arg.Budget.*;
-import com.example.phoebe.youtiao.controler.arg.DeleteAccountBookByIdArg;
+import com.example.phoebe.youtiao.commmon.util.BeanUtil;
+import com.example.phoebe.youtiao.controller.arg.Budget.*;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +27,8 @@ public class BudgetController  {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return budgetService.addBudget();
+        AddbudgetVo vo = BeanUtil.copy(arg, AddbudgetVo.class);
+        return budgetService.addBudget(vo);
     }
 
     @ApiOperation(value = "更新预算")
@@ -39,7 +38,8 @@ public class BudgetController  {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return budgetService.updateBudget();
+        UpdateBudgetVo vo = BeanUtil.copy(arg, UpdateBudgetVo.class);
+        return budgetService.updateBudget(vo);
     }
 
     @ApiOperation(value = "删除预算")
@@ -49,17 +49,21 @@ public class BudgetController  {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return budgetService.deleteBudgetById();
+
+        DeleteBudgetVo vo = BeanUtil.copy(arg, DeleteBudgetVo.class);
+        return budgetService.deleteBudgetById(vo);
     }
 
     @ApiOperation(value = "通过id获得预算详情")
-    @RequestMapping(value = "getBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult getBudgetById(GetBudgetByIdArg arg){
+    @RequestMapping(value = "queryBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult queryBudgetById(QueryBudgetByIdArg arg){
         if(arg.isWrongParams()){
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return budgetService.getBudgetById();
+
+        QueryBudgetByIdVo vo = BeanUtil.copy(arg, QueryBudgetByIdVo.class);
+        return budgetService.queryBudgetById(vo);
     }
 
     @ApiOperation(value = "展示所有的预算")
@@ -68,6 +72,7 @@ public class BudgetController  {
         if(arg.isWrongParams()){
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return budgetService.listBudget();
+        ListBudgetVo vo = BeanUtil.copy(arg, ListBudgetVo.class);
+        return budgetService.listBudget(vo);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler.arg.Budget;
+package com.example.phoebe.youtiao.controller.arg.Budget;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,11 +8,11 @@ import java.io.Serializable;
 
 @Data
 public class DeleteBudgetArg implements Serializable {
-    @ApiModelProperty(name = "budgetId", notes = "预算id")
-    String budgetId;
+    @ApiModelProperty(name = "id", notes = "预算id")
+    String id;
 
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(budgetId)){
+        if(StringUtils.isEmpty(id)){
             return false;
         }
         return true;

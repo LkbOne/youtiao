@@ -1,19 +1,17 @@
-package com.example.phoebe.youtiao.controler.arg.Budget;
+package com.example.phoebe.youtiao.controller.arg.Budget;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class UpdateBudgetArg implements Serializable {
+public class AddBudgetArg implements Serializable {
+    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    String accountBookId;
 
-    @ApiModelProperty(name = "budgetId", notes = "预算id")
-    String budgetId;
-
-    @ApiModelProperty(name = "budget", notes = "预算")
+    @ApiModelProperty(name = "budget", notes = "预算金额")
     Float budget;
 
     @ApiModelProperty(name = "type", notes = "预算类型（旅游，吃喝等）")
@@ -26,9 +24,7 @@ public class UpdateBudgetArg implements Serializable {
     Date endTime;
 
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(budgetId)){
-            return false;
-        }
         return true;
     }
+
 }

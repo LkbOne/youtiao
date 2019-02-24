@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.dao.entity;
+package com.example.phoebe.youtiao.api.result;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 @Data
-public class ExpensesEntity implements Serializable {
+public class QueryExpensesByIdResult implements Serializable {
     String id;
     String budgetId;
     String accountBookId;
@@ -14,7 +14,6 @@ public class ExpensesEntity implements Serializable {
     Float expenses;
     Integer inType;
     Integer outType;
-    Integer status;
-    Date createTime;
-    Date lastModifyTime;
+    Long createTime;
+    Long lastModifyTime;
 }

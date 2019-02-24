@@ -1,14 +1,18 @@
-package com.example.phoebe.youtiao.controler;
+package com.example.phoebe.youtiao.controller;
 
-import com.example.phoebe.youtiao.api.BudgetService;
 import com.example.phoebe.youtiao.api.ExpensesService;
+import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
+import com.example.phoebe.youtiao.api.vo.expenses.AddExpensesVo;
+import com.example.phoebe.youtiao.api.vo.expenses.DeleteExpensesVo;
+import com.example.phoebe.youtiao.api.vo.expenses.QueryExpensesByIdVo;
+import com.example.phoebe.youtiao.api.vo.expenses.UpdateExpensesVo;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
-import com.example.phoebe.youtiao.controler.arg.Expenses.*;
+import com.example.phoebe.youtiao.commmon.util.BeanUtil;
+import com.example.phoebe.youtiao.controller.arg.Expenses.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +31,8 @@ public class ExpensesController {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-
-        return expensesService.addExpenses();
+        AddExpensesVo vo = BeanUtil.copy(arg, AddExpensesVo.class);
+        return expensesService.addExpenses(vo);
     }
 
     @ApiOperation(value = "更新花费")
@@ -38,7 +42,8 @@ public class ExpensesController {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return expensesService.updateExpenses();
+        UpdateExpensesVo vo = BeanUtil.copy(arg, UpdateExpensesVo.class);
+        return expensesService.updateExpenses(vo);
     }
 
     @ApiOperation(value = "删除花费")
@@ -48,17 +53,21 @@ public class ExpensesController {
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return expensesService.deleteExpensesById();
+
+        DeleteExpensesVo vo = BeanUtil.copy(arg, DeleteExpensesVo.class);
+        return expensesService.deleteExpensesById(vo);
     }
 
     @ApiOperation(value = "通过id获得花费详情")
-    @RequestMapping(value = "getExpensesById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult getExpensesById(GetExpensesByIdArg arg){
+    @RequestMapping(value = "QueryExpensesById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult<QueryExpensesByIdResult> getExpensesById(QueryExpensesByIdArg arg){
         if(arg.isWrongParams()){
 
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return expensesService.getExpensesById();
+        QueryExpensesByIdVo vo = BeanUtil.copy(arg, QueryExpensesByIdVo.class);
+
+        return expensesService.queryExpensesById(vo);
     }
 
     @ApiOperation(value = "展示所有的花费")

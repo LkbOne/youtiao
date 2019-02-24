@@ -1,14 +1,16 @@
-package com.example.phoebe.youtiao.controler.arg.Budget;
+package com.example.phoebe.youtiao.controller.arg.Budget;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
 public class ListBudgetArg implements Serializable {
+
+    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    String accountBookId;
 
     @ApiModelProperty(name = "BudgetZoneLeft", notes = "预算最小值")
     Float BudgetZoneLeft;

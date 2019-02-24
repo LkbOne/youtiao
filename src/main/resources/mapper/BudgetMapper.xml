@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.phoebe.youtiao.dao.api.BudgetDao">
+    <resultMap id="BaseResultMap" type="budgetEntity">
+        <id column="id" property="id"/>
+        <result column="account_book_id" property="accountBookId"/>
+        <result column="budget" property="budget"/>
+        <result column="status" property="status"/>
+        <result column="type" property="type"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+    </resultMap>
+
+    <insert id="addBudget" parameterType="budgetEntity">
+        INSERT INTO budget(
+        `id`,
+        `account_book_id`,
+        `budget`,
+        `status`,
+        `type`,
+        `begin_time`,
+        `end_time`,
+        `create_time`,
+        `last_modify_time`
+        )
+        VALUES (
+        #{id},
+        #{accountBookId},
+        #{budget},
+        #{status},
+        #{type},
+        #{beginTime},
+        #{endTime},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateBudget" parameterType="budgetEntity">
+        UPDATE budget
+        <set>
+            <if test="budget != null">
+                `budget` = #{budget},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="beginTime != null">
+                `begin_time` = #{beginTime},
+            </if>
+            <if test="endTime != null">
+                `end_time` = #{endTime},
+            </if>
+
+            `last_modify_time` = now()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="queryBudgetById" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM budget
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryBudgetByAccountBookId" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM budget
+        WHERE account_book_id = #{accountBookId}
+    </select>
+
+    <delete id="deleteBudgetById" parameterType="map">
+        DELETE FROM budget WHERE id=#{id}
+    </delete>
+
+</mapper>

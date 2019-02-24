@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler.arg;
+package com.example.phoebe.youtiao.controller.arg;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

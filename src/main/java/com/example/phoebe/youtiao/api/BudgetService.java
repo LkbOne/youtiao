@@ -1,15 +1,23 @@
 package com.example.phoebe.youtiao.api;
 
+import com.example.phoebe.youtiao.api.result.QueryAccountBookByAbIdResult;
+import com.example.phoebe.youtiao.api.result.QueryBudgetByIdResult;
+import com.example.phoebe.youtiao.api.vo.budget.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
+import com.example.phoebe.youtiao.dao.entity.BudgetEntity;
+
+import java.util.List;
 
 public interface BudgetService {
-    ModelResult addBudget();
+    ModelResult addBudget(AddbudgetVo vo);
 
-    ModelResult updateBudget();
+    ModelResult updateBudget(UpdateBudgetVo vo);
 
-    ModelResult deleteBudgetById();
+    ModelResult deleteBudgetById(DeleteBudgetVo vo);
 
-    ModelResult getBudgetById();
+    ModelResult<QueryBudgetByIdResult> queryBudgetById(QueryBudgetByIdVo vo);
 
-    ModelResult listBudget();
+    ModelResult<List<BudgetEntity>> listBudget(ListBudgetVo vo);
+
+    ModelResult<QueryAccountBookByAbIdResult> queryAccountBookByAbId(ListBudgetVo vo);
 }

@@ -1,12 +1,14 @@
-package com.example.phoebe.youtiao.api.vo.expenses;
+package com.example.phoebe.youtiao.controller.arg.Expenses;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
 @Data
-public class AddExpensesVo implements Serializable {
+public class AddExpensesArg implements Serializable {
+
     @ApiModelProperty(value = "budgetId", notes = "budgetId")
     String budgetId;
 
@@ -25,4 +27,10 @@ public class AddExpensesVo implements Serializable {
     @ApiModelProperty(value = "outType", notes = "该花费的状态（已经花费，计划花费，正在花费）")
     Integer outType;
 
+    public boolean isWrongParams(){
+        if (StringUtils.isEmpty(name)){
+            return true;
+        }
+        return false;
+    }
 }

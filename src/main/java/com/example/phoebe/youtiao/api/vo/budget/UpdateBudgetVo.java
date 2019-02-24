@@ -7,11 +7,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AddbudgetVo implements Serializable {
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
-    String accountBookId;
+public class UpdateBudgetVo implements Serializable {
+    @ApiModelProperty(name = "id", notes = "预算id")
+    String id;
 
-    @ApiModelProperty(name = "budget", notes = "预算金额")
+    @ApiModelProperty(name = "budget", notes = "预算")
     Float budget;
 
     @ApiModelProperty(name = "type", notes = "预算类型（旅游，吃喝等）")

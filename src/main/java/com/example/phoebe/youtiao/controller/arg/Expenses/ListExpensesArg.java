@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler.arg.Expenses;
+package com.example.phoebe.youtiao.controller.arg.Expenses;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 
 @Data
-public class AddExpensesArg implements Serializable {
+public class ListExpensesArg implements Serializable {
     @ApiModelProperty(value = "name", notes = "名字")
     String name;
 

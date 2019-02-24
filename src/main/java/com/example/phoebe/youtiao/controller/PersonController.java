@@ -1,4 +1,4 @@
-package com.example.phoebe.youtiao.controler;
+package com.example.phoebe.youtiao.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
