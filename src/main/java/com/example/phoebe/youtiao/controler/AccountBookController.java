@@ -1,13 +1,16 @@
 package com.example.phoebe.youtiao.controler;
 
 import com.example.phoebe.youtiao.api.AccountBookService;
+import com.example.phoebe.youtiao.api.vo.accountBook.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
+import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.controler.arg.*;
 import com.example.phoebe.youtiao.service.impl.AccountBookServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,42 +27,47 @@ public class AccountBookController {
 
     @ApiOperation(value = "添加账本")
     @RequestMapping(value = "addAccountBook", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult addAccountBook(AddAccountBookArg arg){
+    public ModelResult addAccountBook(@RequestBody AddAccountBookArg arg){
         if(arg.isWrongParams()){
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return accountBookService.addAccountBook();
+        AddAccountBookVo vo = BeanUtil.copy(arg, AddAccountBookVo.class);
+        return accountBookService.addAccountBook(vo);
     }
 
     @ApiOperation(value = "更新账本")
     @RequestMapping(value = "updateAccountBook", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult updateAccountBook(UpdateAccountBookArg arg){
+    public ModelResult updateAccountBook(@RequestBody UpdateAccountBookArg arg){
         if(arg.isWrongParams()){
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return accountBookService.updateAccountBook();
+        UpdateAccountBookVo vo = BeanUtil.copy(arg, UpdateAccountBookVo.class);
+        return accountBookService.updateAccountBook(vo);
     }
 
     @ApiOperation(value = "删除账本")
     @RequestMapping(value = "deleteAccountBookById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult deleteAccountBookById(DeleteAccountBookByIdArg arg){
+    public ModelResult deleteAccountBookById(@RequestBody DeleteAccountBookByIdArg arg){
         if(arg.isWrongParams()){
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return accountBookService.deleteAccountBookById();
+        DeleteAccountBookVo vo = BeanUtil.copy(arg, DeleteAccountBookVo.class);
+        return accountBookService.deleteAccountBookById(vo);
     }
 
     @ApiOperation(value = "通过id获得账本详情")
     @RequestMapping(value = "getAccountBookById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult getAccountBookById(GetAccountBookByIdArg arg){
+    public ModelResult getAccountBookById(@RequestBody GetAccountBookByIdArg arg){
         if(arg.isWrongParams()){
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return accountBookService.getAccountBookById();
+
+        GetAccountBookByIdVo vo = BeanUtil.copy(arg, GetAccountBookByIdVo.class);
+        return accountBookService.getAccountBookById(vo);
     }
 
     @ApiOperation(value = "展示所有的账本")
@@ -69,7 +77,8 @@ public class AccountBookController {
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        return accountBookService.listAccountBook();
+        ListAccountBookVo vo = BeanUtil.copy(arg, ListAccountBookVo.class);
+        return accountBookService.listAccountBook(vo);
     }
 
 }

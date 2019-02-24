@@ -1,15 +1,18 @@
 package com.example.phoebe.youtiao.api;
 
+import com.example.phoebe.youtiao.api.result.GetAccountBookByIdResult;
+import com.example.phoebe.youtiao.api.result.ListAccountBookResult;
+import com.example.phoebe.youtiao.api.vo.accountBook.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 
 public interface AccountBookService {
-    ModelResult addAccountBook();
+    ModelResult addAccountBook(AddAccountBookVo vo);
 
-    ModelResult updateAccountBook();
+    ModelResult updateAccountBook(UpdateAccountBookVo vo);
 
-    ModelResult deleteAccountBookById();
+    ModelResult deleteAccountBookById(DeleteAccountBookVo vo);
 
-    ModelResult getAccountBookById();
+    ModelResult<GetAccountBookByIdResult> getAccountBookById(GetAccountBookByIdVo vo);
 
-    ModelResult listAccountBook();
+    ModelResult<ListAccountBookResult> listAccountBook(ListAccountBookVo vo);
 }

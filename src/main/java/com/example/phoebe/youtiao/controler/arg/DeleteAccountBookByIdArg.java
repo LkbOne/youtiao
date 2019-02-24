@@ -8,11 +8,11 @@ import java.io.Serializable;
 
 @Data
 public class DeleteAccountBookByIdArg implements Serializable {
-    @ApiModelProperty(value = "accountBookId", notes = "账本id")
-    String accountBookId;
+    @ApiModelProperty(value = "id", notes = "账本id")
+    String id;
 
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(accountBookId)){
+        if(StringUtils.isEmpty(id)){
             return true;
         }
         return false;

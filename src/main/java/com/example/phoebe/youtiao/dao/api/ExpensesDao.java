@@ -1,6 +1,4 @@
 package com.example.phoebe.youtiao.dao.api;
 
-
-public class BudgetService {
-
+public interface ExpensesDao {
 }
