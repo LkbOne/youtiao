@@ -8,11 +8,11 @@ import java.io.Serializable;
 
 @Data
 public class GetAccountBookByIdArg implements Serializable {
-    @ApiModelProperty(value = "accountBookId", notes = "账本id")
-    String accountBookId;
+    @ApiModelProperty(value = "token", notes = "token")
+    String token;
 
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(accountBookId)){
+        if(StringUtils.isEmpty(token)){
             return true;
         }
         return false;

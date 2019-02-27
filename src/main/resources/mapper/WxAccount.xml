@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.phoebe.youtiao.dao.api.WxAccountDao">
+    <resultMap id="BaseResultMap" type="wxAccountEntity">
+        <id column="id" property="id"/>
+        <result column="openid" property="openid"/>
+        <result column="account_id" property="accountId"/>
+        <result column="wx_name" property="wxName"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+    </resultMap>
+
+    <insert id="addWxAccount" parameterType="wxAccountEntity">
+        INSERT INTO wx_account(
+        `id`,
+        `openid`,
+        `account_id`,
+        `avatar_url`,
+        `wx_name`,
+        `phone`,
+        `create_time`,
+        `last_modify_time`
+        )
+        VALUES (
+        #{id},
+        #{openid},
+        #{accountId},
+        #{avatarUrl},
+        #{wxName},
+        #{phone},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateWxAccount" parameterType="accountEntity">
+        UPDATE wx_account
+        <set>
+            <if test="accountId != null">
+                `account_id` = #{accountId},
+            </if>
+            <if test="phone != null">
+                `phone` = #{phone},
+            </if>
+            <if test="wxName != null">
+                `wx_name` = #{wxName},
+            </if>
+            <if test="avatarUrl != null">
+                `avatar_url` = #{avatarUrl},
+            </if>
+            `last_modify_time` = now()
+        </set>
+        WHERE `openid` = #{openid}
+    </update>
+
+    <select id="queryWxAccountByOpenid" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM wx_account
+        WHERE openid = #{openid}
+    </select>
+
+    <select id="queryAccountIdByOpenid" parameterType="map" resultType="string">
+        SELECT account_id
+        FROM wx_account
+        WHERE openid = #{openid}
+    </select>
+
+    <select id="queryOpenidByAccountId" parameterType="map" resultType="String">
+        SELECT openid
+        FROM wx_account
+        WHERE account_id = #{accountId}
+    </select>
+
+    <delete id="deleteWxAccountByOpenid" parameterType="map">
+        DELETE FROM wx_account WHERE openid=#{openid}
+    </delete>
+
+
+
+</mapper>

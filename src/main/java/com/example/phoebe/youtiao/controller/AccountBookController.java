@@ -5,9 +5,11 @@ import com.example.phoebe.youtiao.api.vo.accountBook.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
+import com.example.phoebe.youtiao.commmon.util.TokenUtil;
 import com.example.phoebe.youtiao.controller.arg.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,8 +63,12 @@ public class AccountBookController {
             log.warn("");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-
-        GetAccountBookByIdVo vo = BeanUtil.copy(arg, GetAccountBookByIdVo.class);
+        String accountId = TokenUtil.getAccountIdByToken(arg.getToken());
+        if(StringUtils.isEmpty(accountId)){
+            return new ModelResult(SHErrorCode.LOGIN_TOKEN_INVALID);
+        }
+        GetAccountBookByIdVo vo = new GetAccountBookByIdVo();
+        vo.setId(accountId);
         return accountBookService.getAccountBookById(vo);
     }
 

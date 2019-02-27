@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.phoebe.youtiao.dao.api.AccountDao">
+    <resultMap id="BaseResultMap" type="accountEntity">
+        <id column="id" property="id"/>
+        <result column="account" property="account"/>
+        <result column="status" property="status"/>
+        <result column="open_history" property="openHistory"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+    </resultMap>
+
+    <insert id="addAccount" parameterType="accountEntity">
+        INSERT INTO account(
+        `id`,
+        `account`,
+        `status`,
+        `open_history`,
+        `create_time`,
+        `last_modify_time`
+        )
+        VALUES (
+        #{id},
+        #{account},
+        #{status},
+        #{openHistory},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateAccount" parameterType="accountEntity">
+        UPDATE account
+        <set>
+            <if test="account != null">
+                `account` = #{account},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="openHistory != null">
+                `open_history` = #{openHistory},
+            </if>
+            `last_modify_time` = now()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="queryAccountById" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM account
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteAccountById" parameterType="map">
+        DELETE FROM account WHERE id=#{id}
+    </delete>
+
+</mapper>
