@@ -19,7 +19,7 @@ public class AccountManager {
 
     @Data
     public class WxAuth{
-        String sessionKey;
+        String session_key;
         String openid;
     }
 

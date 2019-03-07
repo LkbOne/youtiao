@@ -1,11 +1,10 @@
 package com.example.phoebe.youtiao.api;
 
+import com.example.phoebe.youtiao.api.result.ListExpensesByAccountBookIdResult;
 import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
-import com.example.phoebe.youtiao.api.vo.expenses.AddExpensesVo;
-import com.example.phoebe.youtiao.api.vo.expenses.DeleteExpensesVo;
-import com.example.phoebe.youtiao.api.vo.expenses.QueryExpensesByIdVo;
-import com.example.phoebe.youtiao.api.vo.expenses.UpdateExpensesVo;
+import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
+import com.example.phoebe.youtiao.commmon.PageResult;
 
 public interface ExpensesService {
     ModelResult addExpenses(AddExpensesVo vo);
@@ -16,5 +15,5 @@ public interface ExpensesService {
 
     ModelResult<QueryExpensesByIdResult> queryExpensesById(QueryExpensesByIdVo vo);
 
-    ModelResult listExpenses();
+    ModelResult<PageResult<ListExpensesByAccountBookIdResult>> listExpenses(ListExpensesVo vo);
 }

@@ -12,9 +12,10 @@ public class ExpensesEntity implements Serializable {
     String accountBookId;
     String name;
     Float expenses;
-    Integer inType;
-    Integer outType;
+    Integer type;
+    Integer classification;
     Integer status;
     Date createTime;
     Date lastModifyTime;
+    String description;
 }

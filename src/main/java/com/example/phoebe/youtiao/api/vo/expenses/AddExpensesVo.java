@@ -1,12 +1,13 @@
 package com.example.phoebe.youtiao.api.vo.expenses;
 
+import com.example.phoebe.youtiao.controller.arg.BaseArg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class AddExpensesVo implements Serializable {
+public class AddExpensesVo extends BaseArg {
     @ApiModelProperty(value = "budgetId", notes = "budgetId")
     String budgetId;
 
@@ -16,13 +17,16 @@ public class AddExpensesVo implements Serializable {
     @ApiModelProperty(value = "name", notes = "名字")
     String name;
 
+    @ApiModelProperty(value = "description", notes = "名字")
+    String description;
+
     @ApiModelProperty(value = "expenses", notes = "金额")
     Float expenses;
 
-    @ApiModelProperty(value = "inType", notes = "收入类型(工资、兼职）")
-    Integer inType;
+    @ApiModelProperty(value = "type", notes = "0 为收入  1 为支出")
+    Integer type;
 
-    @ApiModelProperty(value = "outType", notes = "该花费的状态（已经花费，计划花费，正在花费）")
-    Integer outType;
+    @ApiModelProperty(value = "classification", notes = "该花费的状态（已经花费，计划花费，正在花费）")
+    Integer classification;
 
 }

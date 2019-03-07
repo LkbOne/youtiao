@@ -1,14 +1,18 @@
 package com.example.phoebe.youtiao.controller.arg.Budget;
 
+import com.example.phoebe.youtiao.controller.arg.BaseArg;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
-public class AddBudgetArg implements Serializable {
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+@ApiModel
+public class AddBudgetArg extends BaseArg {
+    @ApiModelProperty(name = "accountBookId",notes = "账本id")
     String accountBookId;
 
     @ApiModelProperty(name = "budget", notes = "预算金额")
@@ -23,8 +27,12 @@ public class AddBudgetArg implements Serializable {
     @ApiModelProperty(name = "endTime", notes = "结束时间")
     Date endTime;
 
+    @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
-        return true;
+        if(StringUtils.isBlank(accountBookId)){
+            return true;
+        }
+        return false;
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.phoebe.youtiao.dao.api;
 
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
 import com.example.phoebe.youtiao.dao.entity.BudgetEntity;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +18,5 @@ public interface BudgetDao {
 
     BudgetEntity queryBudgetById(@Param("id") String budgetId);
 
-    List<BudgetEntity> queryAccountBookByAccountBookId(@Param("accountBookId") String accountBookId);
+    List<BudgetEntity> listBudgetByAccountBookId(@Param("accountBookId") String accountBookId, @Param("page") Page page);
 }

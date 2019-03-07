@@ -9,6 +9,7 @@
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
         <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="open_history" property="openHistory"/>
     </resultMap>
 
     <insert id="addAccountBook" parameterType="accountBookEntity">
@@ -19,7 +20,8 @@
         `color`,
         `status`,
         `create_time`,
-        `last_modify_time`
+        `last_modify_time`,
+        `open_history`
         )
         VALUES (
         #{id},
@@ -28,7 +30,8 @@
         #{color},
         #{status},
         now(),
-        now()
+        now(),
+        #{openHistory}
         )
     </insert>
 
@@ -44,10 +47,30 @@
             <if test="status != null">
                 `status` = #{status},
             </if>
-            `last_modify_time` = now()
+            `last_modify_time` = now(),
         </set>
         WHERE `id` = #{id}
     </update>
+
+
+    <update id="updateAccountBookOpenHistory" parameterType="map">
+        UPDATE account_book
+        <set>
+            `open_history` = #{nowStatue}
+        </set>
+        WHERE open_history = #{beforeStatue}
+    </update>
+
+    <update id="updateAccountBookOpenHistoryById" parameterType="map">
+        UPDATE account_book
+        <set>
+            `open_history` = #{nowStatue}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
 
     <select id="queryAccountBookById" parameterType="map" resultMap="BaseResultMap">
         SELECT *
@@ -55,17 +78,12 @@
         WHERE id = #{id}
     </select>
 
-    <select id="queryAccountBookByAid" parameterType="map" resultMap="BaseResultMap">
+    <select id="listAccountBookByAccountId" parameterType="map" resultMap="BaseResultMap">
         SELECT *
         FROM account_book
-        WHERE aid = #{aid}
+        WHERE aid = #{aid} order by create_time
     </select>
 
-
-    <!--<select id="queryAll" parameterType="map" resultMap="BaseResultMap">-->
-        <!--SELECT *-->
-        <!--FROM account_book-->
-    <!--</select>-->
 
     <delete id="deleteAccountBookById" parameterType="map">
         DELETE FROM account_book WHERE id=#{id}

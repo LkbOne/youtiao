@@ -68,7 +68,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="queryBudgetByAccountBookId" parameterType="map" resultMap="BaseResultMap">
+    <select id="listBudgetByAccountBookId" parameterType="map" resultMap="BaseResultMap">
         SELECT *
         FROM budget
         WHERE account_book_id = #{accountBookId}

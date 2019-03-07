@@ -7,12 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 
 @Data
-public class GetAccountBookByIdArg implements Serializable {
-    @ApiModelProperty(value = "token", notes = "token")
-    String token;
+public class GetAccountBookByIdArg extends BaseArg {
+    @ApiModelProperty(name = "id", notes = "账本id")
+    String id;
 
+    @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
-        if(StringUtils.isEmpty(token)){
+        if(StringUtils.isEmpty(id)){
             return true;
         }
         return false;

@@ -1,6 +1,7 @@
 package com.example.phoebe.youtiao.commmon.util;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
+import com.example.phoebe.youtiao.controller.arg.ResetOpenHistoryArg;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +43,9 @@ public class BeanUtil {
 
     /**
      * @description List对象之间转换, 注：useConverter= false
+     * @param <T>
      * @param sourceList 源对象
      * @param target     目标对象类
-     * @param <T>
      * @return
      */
     public static <T> List<T> copy(List<?> sourceList, Class<T> target) {

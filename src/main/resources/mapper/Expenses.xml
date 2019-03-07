@@ -7,9 +7,10 @@
         <result column="account_book_id" property="accountBookId"/>
         <result column="name" property="name"/>
         <result column="expenses" property="expenses"/>
-        <result column="in_type" property="inType"/>
-        <result column="out_type" property="outType"/>
+        <result column="type" property="type"/>
+        <result column="classification" property="classification"/>
         <result column="status" property="status"/>
+        <result column="description" property="description"/>
         <result column="create_time" property="createTime"/>
         <result column="last_modify_time" property="lastModifyTime"/>
     </resultMap>
@@ -21,11 +22,12 @@
         `account_book_id`,
         `name`,
         `expenses`,
-        `in_type`,
-        `out_type`,
+        `type`,
+        `classification`,
         `status`,
         `create_time`,
-        `last_modify_time`
+        `last_modify_time`,
+        `description`
         )
         VALUES (
         #{id},
@@ -33,11 +35,12 @@
         #{accountBookId},
         #{name},
         #{expenses},
-        #{inType},
-        #{outType},
+        #{type},
+        #{classification},
         #{status},
         now(),
-        now()
+        now(),
+        #{description}
         )
     </insert>
 
@@ -50,14 +53,17 @@
             <if test="name != null">
                 `name` = #{name},
             </if>
-            <if test="inType != null">
-                `in_Type` = #{inType},
+            <if test="type != null">
+                `type` = #{type},
             </if>
-            <if test="outType != null">
-                `out_Type` = #{outType},
+            <if test="classification != null">
+                `classification` = #{classification},
             </if>
             <if test="status != null">
                 `status` = #{status},
+            </if>
+            <if test="description != null">
+                `description` = #{description},
             </if>
             `last_modify_time` = now()
         </set>
@@ -70,10 +76,10 @@
         WHERE id = #{id}
     </select>
 
-    <select id="queryExpensesByAccountBookId" parameterType="map" resultMap="BaseResultMap">
+    <select id="listExpensesByAccountBookId" parameterType="map" resultMap="BaseResultMap">
         SELECT *
         FROM expenses
-        WHERE account_book_id = #{accountBookId}
+        WHERE account_book_id = #{accountBookId} order by expenses.create_time desc
     </select>
 
     <select id="queryExpensesByBudgetId" parameterType="map" resultMap="BaseResultMap">

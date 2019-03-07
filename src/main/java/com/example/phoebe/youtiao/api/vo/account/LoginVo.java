@@ -10,4 +10,10 @@ import java.io.Serializable;
 public class LoginVo implements Serializable {
     @ApiModelProperty(name = "code", notes = "小程序返回的code")
     String code;
+
+    @ApiModelProperty(name = "wxName", notes = "微信名")
+    String wxName;
+
+    @ApiModelProperty(name = "avatarUrl", notes = "头像url")
+    String avatarUrl;
 }

@@ -14,4 +14,5 @@ public class AccountBookEntity implements Serializable {
     Integer status;
     Date createTime;
     Date lastModifyTime;
+    Integer openHistory;
 }

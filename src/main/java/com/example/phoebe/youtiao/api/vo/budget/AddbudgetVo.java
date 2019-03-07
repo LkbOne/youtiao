@@ -1,5 +1,6 @@
 package com.example.phoebe.youtiao.api.vo.budget;
 
+import com.example.phoebe.youtiao.controller.arg.BaseArg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AddbudgetVo implements Serializable {
+public class AddbudgetVo extends BaseArg {
     @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
 

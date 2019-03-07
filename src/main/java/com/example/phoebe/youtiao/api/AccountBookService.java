@@ -4,6 +4,7 @@ import com.example.phoebe.youtiao.api.result.GetAccountBookByIdResult;
 import com.example.phoebe.youtiao.api.result.ListAccountBookResult;
 import com.example.phoebe.youtiao.api.vo.accountBook.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
+import com.example.phoebe.youtiao.commmon.PageResult;
 
 public interface AccountBookService {
     ModelResult addAccountBook(AddAccountBookVo vo);
@@ -14,5 +15,7 @@ public interface AccountBookService {
 
     ModelResult<GetAccountBookByIdResult> getAccountBookById(GetAccountBookByIdVo vo);
 
-    ModelResult<ListAccountBookResult> listAccountBook(ListAccountBookVo vo);
+    ModelResult<PageResult<ListAccountBookResult>> listAccountBook(ListAccountBookVo vo);
+
+    ModelResult resetOpenHistory(ResetOpenHistoryVo vo);
 }

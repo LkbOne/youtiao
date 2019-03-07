@@ -12,8 +12,9 @@ public class QueryExpensesByIdResult implements Serializable {
     String accountBookId;
     String name;
     Float expenses;
-    Integer inType;
-    Integer outType;
+    Integer type;
+    Integer classification;
     Long createTime;
     Long lastModifyTime;
+    String description;
 }

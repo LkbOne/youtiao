@@ -1,5 +1,6 @@
 package com.example.phoebe.youtiao.commmon;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.io.Serializable;
 
@@ -34,7 +35,10 @@ public class ModelResult<T> implements Serializable {
     	this.errMsg = code.getErrorMessage();
     	this.data = data;
     }
-
+	@JsonIgnore
+	public boolean isSuccess() {
+		return errCode == 0;
+	}
 	public static <E> ModelResult<E> newSuccess(){
 		return new ModelResult<>(SHErrorCode.SUCCESS);
 	}

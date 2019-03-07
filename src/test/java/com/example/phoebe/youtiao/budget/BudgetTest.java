@@ -3,6 +3,7 @@ package com.example.phoebe.youtiao.budget;
 import com.example.phoebe.youtiao.api.BudgetService;
 import com.example.phoebe.youtiao.api.vo.budget.AddbudgetVo;
 import com.example.phoebe.youtiao.api.vo.budget.UpdateBudgetVo;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore
 public class BudgetTest {
 
     @Autowired

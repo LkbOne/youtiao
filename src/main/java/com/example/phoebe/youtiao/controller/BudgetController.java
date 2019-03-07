@@ -1,17 +1,17 @@
 package com.example.phoebe.youtiao.controller;
 
 import com.example.phoebe.youtiao.api.BudgetService;
+import com.example.phoebe.youtiao.api.result.QueryBudgetByIdResult;
 import com.example.phoebe.youtiao.api.vo.budget.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
+import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.controller.arg.Budget.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/budget")
@@ -20,33 +20,36 @@ public class BudgetController  {
     @Autowired
     BudgetService budgetService;
 
+    @TokenCheckTrigger
     @ApiOperation(value = "添加预算")
     @RequestMapping(value = "addBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult addBudget(AddBudgetArg arg){
+    public ModelResult addBudget(@RequestHeader String token, @RequestBody AddBudgetArg arg){
         if(arg.isWrongParams()){
-
+            log.warn("BudgetController.addBudget");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
         AddbudgetVo vo = BeanUtil.copy(arg, AddbudgetVo.class);
         return budgetService.addBudget(vo);
     }
 
+    @TokenCheckTrigger
     @ApiOperation(value = "更新预算")
-    @RequestMapping(value = "updateBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult updateBudget(UpdateBudgetArg arg){
+    @RequestMapping(value = "updateBudget", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+    public ModelResult updateBudget(@RequestHeader String token, @RequestBody UpdateBudgetArg arg){
         if(arg.isWrongParams()){
-
+            log.warn("BudgetController.updateBudget");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
         UpdateBudgetVo vo = BeanUtil.copy(arg, UpdateBudgetVo.class);
         return budgetService.updateBudget(vo);
     }
 
+    @TokenCheckTrigger
     @ApiOperation(value = "删除预算")
-    @RequestMapping(value = "deleteBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult deleteBudgetById(DeleteBudgetArg arg){
+    @RequestMapping(value = "deleteBudgetById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+    public ModelResult deleteBudgetById(@RequestHeader String token, @RequestBody DeleteBudgetArg arg){
         if(arg.isWrongParams()){
-
+            log.warn("BudgetController.deleteBudgetById");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
 
@@ -54,11 +57,12 @@ public class BudgetController  {
         return budgetService.deleteBudgetById(vo);
     }
 
+    @TokenCheckTrigger
     @ApiOperation(value = "通过id获得预算详情")
     @RequestMapping(value = "queryBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult queryBudgetById(QueryBudgetByIdArg arg){
+    public ModelResult<QueryBudgetByIdResult> queryBudgetById(@RequestHeader String token, @RequestBody QueryBudgetByIdArg arg){
         if(arg.isWrongParams()){
-
+            log.warn("BudgetController.queryBudgetById");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
 
@@ -66,13 +70,15 @@ public class BudgetController  {
         return budgetService.queryBudgetById(vo);
     }
 
+    @TokenCheckTrigger
     @ApiOperation(value = "展示所有的预算")
-    @RequestMapping(value = "listBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult listBudget(ListBudgetArg arg){
+    @RequestMapping(value = "listBudgetByAccountBookId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult listBudgetByAccountBookId(@RequestHeader String token, @RequestBody ListBudgetArg arg){
         if(arg.isWrongParams()){
+            log.warn("BudgetController.listBudget");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
         ListBudgetVo vo = BeanUtil.copy(arg, ListBudgetVo.class);
-        return budgetService.listBudget(vo);
+        return budgetService.listBudgetByAccountBookId(vo);
     }
 }
