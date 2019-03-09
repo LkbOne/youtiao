@@ -10,7 +10,7 @@ public class ExpensesEntity implements Serializable {
     String id;
     String budgetId;
     String accountBookId;
-    String name;
+    Date expenseDate;
     Float expenses;
     Integer type;
     Integer classification;

@@ -9,7 +9,7 @@ public class ListExpensesByAccountBookIdResult implements Serializable {
     String id;
     String budgetId;
     String accountBookId;
-    String name;
+    Long expenseDate;
     Float expenses;
     Integer type;
     Integer classification;

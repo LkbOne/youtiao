@@ -5,7 +5,7 @@
         <id column="id" property="id"/>
         <result column="budget_id" property="budgetId"/>
         <result column="account_book_id" property="accountBookId"/>
-        <result column="name" property="name"/>
+        <result column="expense_date" property="expenseDate"/>
         <result column="expenses" property="expenses"/>
         <result column="type" property="type"/>
         <result column="classification" property="classification"/>
@@ -20,7 +20,7 @@
         `id`,
         `budget_id`,
         `account_book_id`,
-        `name`,
+        `expense_date`,
         `expenses`,
         `type`,
         `classification`,
@@ -33,7 +33,7 @@
         #{id},
         #{budgetId},
         #{accountBookId},
-        #{name},
+        #{expenseDate},
         #{expenses},
         #{type},
         #{classification},
@@ -50,8 +50,8 @@
             <if test="expenses != null">
                 `expenses` = #{expenses},
             </if>
-            <if test="name != null">
-                `name` = #{name},
+            <if test="expense_date != null">
+                `expense_date` = #{expenseDate},
             </if>
             <if test="type != null">
                 `type` = #{type},
@@ -79,8 +79,29 @@
     <select id="listExpensesByAccountBookId" parameterType="map" resultMap="BaseResultMap">
         SELECT *
         FROM expenses
-        WHERE account_book_id = #{accountBookId} order by expenses.create_time desc
+        WHERE account_book_id = #{accountBookId}
+         and
+        <if test="beginDate!=null">
+            <![CDATA[ and create_time >= #{beginDate,jdbcType=DATE}]]>
+        </if>
+        <if test="endDate!=null">
+            <![CDATA[ and create_time <= #{endDate}]]>
+        </if>
     </select>
+
+    <select id="sumExpenses" parameterType="map" resultType="Float">
+        SELECT sum(expenses) as expenses
+        FROM expenses
+        WHERE account_book_id = #{accountBookId}
+        and type = #{type}
+        <if test="beginDate!=null">
+             <![CDATA[ and create_time >= #{beginDate}]]>
+        </if>
+        <if test="endDate!=null">
+             <![CDATA[ and create_time<= #{endDate}]]>
+        </if>
+    </select>
+
 
     <select id="queryExpensesByBudgetId" parameterType="map" resultMap="BaseResultMap">
         SELECT *

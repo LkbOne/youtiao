@@ -6,24 +6,20 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
+import java.sql.Date;
 
 @Data
-public class ListExpensesArg extends BasePageArg {
+public class SumThisDayExpensesArg extends BasePageArg {
     @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
+    @ApiModelProperty(name = "searchDay", notes = "查询当天的日期")
+    Date searchDay;
 
-    @ApiModelProperty(name = "recentDay", notes = "最近几天，如果不传就是全部")
-    Integer recentDay;
-
+    @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if(StringUtils.isEmpty(accountBookId)){
             return true;
         }
         return false;
     }
-
-//    可以获得预算下的所有费用
-//    @ApiModelProperty(name = "budgetId", notes = "budgetId", allowEmptyValue = true)
-//    String budgetId;
 }

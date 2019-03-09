@@ -2,6 +2,7 @@ package com.example.phoebe.youtiao.controller;
 
 import com.example.phoebe.youtiao.api.ExpensesService;
 import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
+import com.example.phoebe.youtiao.api.result.SumThisDayExpensesResult;
 import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
@@ -80,5 +81,17 @@ public class ExpensesController {
         }
         ListExpensesVo vo = BeanUtil.copy(arg, ListExpensesVo.class);
         return expensesService.listExpenses(vo);
+    }
+
+    @TokenCheckTrigger
+    @ApiOperation(value = "统计所选日期费用")
+    @RequestMapping(value = "sumThisDayExpenses", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(@RequestHeader String token, @RequestBody SumThisDayExpensesArg arg){
+        if(arg.isWrongParams()){
+            log.warn("");
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        SumThisDayExpensesVo vo = BeanUtil.copy(arg, SumThisDayExpensesVo.class);
+        return expensesService.sumThisDayExpenses(vo);
     }
 }

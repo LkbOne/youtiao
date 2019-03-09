@@ -54,8 +54,12 @@ public class AccountBookServiceImpl implements AccountBookService {
 
     @Override
     public ModelResult deleteAccountBookById(DeleteAccountBookVo vo) {
+        AccountBookEntity entity = accountBookDao.queryAccountBookById(vo.getId());
         if(accountBookDao.deleteAccountBookById(vo.getId()) != 1){
             return new ModelResult(SHErrorCode.DEL_FAIL);
+        }
+        if(entity.getOpenHistory() == 1){
+            accountBookDao.updateMostRecentOpenHistory(1, 1);
         }
         return new ModelResult(SHErrorCode.SUCCESS);
     }

@@ -60,6 +60,13 @@
         </set>
         WHERE open_history = #{beforeStatue}
     </update>
+    <update id="updateMostRecentOpenHistory" parameterType="map">
+        UPDATE account_book
+        <set>
+            `open_history` = #{nowStatue}
+        </set>
+        WHERE id = (select id from ((select id from account_book order by create_time limit #{limit}) as tmp))
+    </update>
 
     <update id="updateAccountBookOpenHistoryById" parameterType="map">
         UPDATE account_book

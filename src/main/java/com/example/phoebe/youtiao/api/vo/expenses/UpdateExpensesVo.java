@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 @Data
 public class UpdateExpensesVo extends BaseArg {
@@ -18,8 +19,8 @@ public class UpdateExpensesVo extends BaseArg {
 //    @ApiModelProperty(name = "accountBookId", notes = "accountBookId")
 //    String accountBookId;
 
-    @ApiModelProperty(name = "name", notes = "名字", allowEmptyValue = true)
-    String name;
+    @ApiModelProperty(name = "expensesDate", notes = "消费时间")
+    Date expensesDate;
 
     @ApiModelProperty(name = "description", notes = "备注", allowEmptyValue = true)
     String description;

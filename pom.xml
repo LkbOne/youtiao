@@ -144,6 +144,11 @@
             <artifactId>async-http-client</artifactId>
             <version>1.9.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -22,4 +22,6 @@ public interface AccountBookDao {
     void updateAccountBookOpenHistory(@Param("beforeStatue") Integer beforeStatue, @Param("nowStatue") Integer nowStatue);
 
     void updateAccountBookOpenHistoryById(@Param("nowStatue") Integer nowStatue, @Param("id") String id);
+
+    void updateMostRecentOpenHistory(@Param("nowStatue") Integer nowStatue, @Param("limit") Integer limit);
 }
