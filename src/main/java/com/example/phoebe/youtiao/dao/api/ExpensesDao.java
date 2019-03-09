@@ -18,7 +18,7 @@ public interface ExpensesDao {
 
     ExpensesEntity queryExpensesById(@Param("id") String id);
 
-    List<ExpensesEntity> listExpensesByAccountBookId(@Param("accountBookId") String accountBookId, @Param("beginDate")DateTime beginDate,@Param("endDate") DateTime endDate, @Param("page") Page page);
+    List<ExpensesEntity> listExpensesByAccountBookId(@Param("accountBookId") String accountBookId, @Param("beginDate")Date beginDate,@Param("endDate") Date endDate, @Param("page") Page page);
 
-    Float sumExpenses(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")DateTime beginDate, @Param("endDate") DateTime endDate);
+    Float sumExpenses(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")Date beginDate, @Param("endDate") Date endDate);
 }

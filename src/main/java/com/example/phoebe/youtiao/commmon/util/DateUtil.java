@@ -18,7 +18,7 @@ public class DateUtil {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss/SSS");
 
-    private static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
+    public static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 

@@ -7,8 +7,8 @@ import java.util.List;
 
 @Data
 public class SumThisDayExpensesResult implements Serializable {
-    Float sumInExpenses;
-    Float sumOutExpenses;
+    Float sumInExpenses = new Float(0);
+    Float sumOutExpenses = new Float(0);
 
     List<ListExpensesByAccountBookIdResult> listExpenses;
 }

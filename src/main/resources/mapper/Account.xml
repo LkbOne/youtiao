@@ -8,6 +8,11 @@
         <result column="open_history" property="openHistory"/>
         <result column="create_time" property="createTime"/>
         <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="name" property="name"/>
+        <result column="real_name" property="realName"/>
+        <result column="phone" property="phone"/>
+        <result column="signature" property="signature"/>
+
     </resultMap>
 
     <insert id="addAccount" parameterType="accountEntity">
@@ -40,6 +45,18 @@
             </if>
             <if test="openHistory != null">
                 `open_history` = #{openHistory},
+            </if>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="realName != null">
+                `real_name` = #{realName},
+            </if>
+            <if test="signature != null">
+                `signature` = #{signature},
+            </if>
+            <if test="phone != null">
+                `phone` = #{phone},
             </if>
             `last_modify_time` = now()
         </set>

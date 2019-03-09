@@ -102,13 +102,12 @@ public class ExpensesServiceImpl implements ExpensesService {
         System.out.println("size:" + vo.getPageSize());
         System.out.println("number:" + vo.getPageNum());
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        DateTime endDate = null;
-        DateTime beginDate = null;
+        Date endDate = null;
+        Date beginDate = null;
         if(null != vo.getRecentDay()){
-            endDate = DateTime.now();
-            beginDate = DateTime.now().minusDays(vo.getRecentDay() - 1);
+            endDate = new Date();
+            beginDate = new Date(endDate.getTime() - vo.getRecentDay() * DateUtil.ONE_DAY_MILLIS);
         }
-
         List<ExpensesEntity> expensesEntities = expensesDao.listExpensesByAccountBookId(vo.getAccountBookId(), beginDate, endDate, page);
 
         List<ListExpensesByAccountBookIdResult> expensesByAccountBookIdResultList = Lists.newArrayList();
@@ -133,8 +132,8 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 
     public ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(SumThisDayExpensesVo vo){
-        DateTime beginDate = new DateTime(vo.getSearchDay());
-        DateTime endDate = beginDate.plus(1);
+        Date endDate = vo.getSearchDay();
+        Date beginDate = new Date(endDate.getTime() - DateUtil.ONE_DAY_MILLIS);
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
         Float sumOutExpenses = expensesDao.sumExpenses( vo.getAccountBookId(),1, beginDate, endDate);
         Float sumInExpenses = expensesDao.sumExpenses( vo.getAccountBookId(),0, beginDate, endDate);

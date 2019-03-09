@@ -12,5 +12,9 @@ public class AccountEntity implements Serializable {
     Integer status;
     String openHistory;
     Date createTime;
-    Date updateTime;
+    Date lastModifyTime;
+    String name;
+    String realName;
+    String signature;
+    String phone;
 }

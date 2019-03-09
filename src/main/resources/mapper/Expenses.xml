@@ -80,13 +80,10 @@
         SELECT *
         FROM expenses
         WHERE account_book_id = #{accountBookId}
-         and
-        <if test="beginDate!=null">
-            <![CDATA[ and create_time >= #{beginDate,jdbcType=DATE}]]>
+        <if test="beginDate!=null and endDate!=null">
+            and create_time  between #{beginDate} and #{endDate}
         </if>
-        <if test="endDate!=null">
-            <![CDATA[ and create_time <= #{endDate}]]>
-        </if>
+
     </select>
 
     <select id="sumExpenses" parameterType="map" resultType="Float">
@@ -94,11 +91,8 @@
         FROM expenses
         WHERE account_book_id = #{accountBookId}
         and type = #{type}
-        <if test="beginDate!=null">
-             <![CDATA[ and create_time >= #{beginDate}]]>
-        </if>
-        <if test="endDate!=null">
-             <![CDATA[ and create_time<= #{endDate}]]>
+        <if test="beginDate!=null and endDate!=null">
+            and create_time  between #{beginDate} and #{endDate}
         </if>
     </select>
 

@@ -3,6 +3,7 @@ package com.example.phoebe.youtiao.service.impl;
 import com.example.phoebe.youtiao.api.AccountService;
 import com.example.phoebe.youtiao.api.result.LoginResult;
 import com.example.phoebe.youtiao.api.vo.account.LoginVo;
+import com.example.phoebe.youtiao.api.vo.account.UpdateCustomDataVo;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.model.RedisLoginEntity;
@@ -10,6 +11,7 @@ import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.RedisUtil;
 import com.example.phoebe.youtiao.commmon.util.TokenUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
+import com.example.phoebe.youtiao.controller.arg.Account.UpdateCustomDataArg;
 import com.example.phoebe.youtiao.dao.api.AccountDao;
 import com.example.phoebe.youtiao.dao.api.WxAccountDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
@@ -19,10 +21,12 @@ import com.example.phoebe.youtiao.service.manager.AccountBookManager;
 import com.example.phoebe.youtiao.service.manager.AccountManager;
 import com.example.phoebe.youtiao.service.manager.RedisManager;
 import com.google.gson.Gson;
+import com.sun.tools.internal.ws.processor.modeler.Modeler;
 import io.swagger.annotations.ApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service("accountService")
@@ -133,5 +137,16 @@ public class AccountServiceImpl implements AccountService {
         return token;
     }
 
+    @Override
+    public ModelResult UpdateCustomData(UpdateCustomDataVo vo){
+        AccountEntity entity = accountDao.queryAccountById(vo.getAccountId());
+        if(null == entity){
+            log.warn("AccountServiceImpl.UpdateCustomData entity is empty vo:{}", vo);
+            return new ModelResult(SHErrorCode.USER_ACCOUNT_NOT_EXIST);
+        }
+        AccountEntity updateEntity = BeanUtil.copy(vo, AccountEntity.class);
+        accountDao.updateAccount(updateEntity);
+        return ModelResult.newSuccess();
+    }
 
 }

@@ -3,10 +3,8 @@ package com.example.phoebe.youtiao.expenses;
 import com.example.phoebe.youtiao.api.ExpensesService;
 import com.example.phoebe.youtiao.api.result.ListExpensesByAccountBookIdResult;
 import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
-import com.example.phoebe.youtiao.api.vo.expenses.AddExpensesVo;
-import com.example.phoebe.youtiao.api.vo.expenses.ListExpensesVo;
-import com.example.phoebe.youtiao.api.vo.expenses.QueryExpensesByIdVo;
-import com.example.phoebe.youtiao.api.vo.expenses.UpdateExpensesVo;
+import com.example.phoebe.youtiao.api.result.SumThisDayExpensesResult;
+import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 import lombok.Data;
@@ -18,10 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore
+//@Ignore
 public class ExpensesTest implements Serializable {
     @Autowired
     ExpensesService expensesService;
@@ -60,8 +59,20 @@ public class ExpensesTest implements Serializable {
         ListExpensesVo vo = new ListExpensesVo();
         vo.setPageNum(1);
         vo.setPageSize(10);
-        vo.setAccountId("4e980d3a8b174e79960fae19cf0c62f3");
+        vo.setAccountBookId("4e980d3a8b174e79960fae19cf0c62f3");
+        vo.setRecentDay(1);
         ModelResult<PageResult<ListExpensesByAccountBookIdResult>> a = expensesService.listExpenses(vo);
+        System.out.println();
+    }
+
+    @Test
+    public void sumThisDayExpenses(){
+        SumThisDayExpensesVo vo = new SumThisDayExpensesVo();
+        vo.setAccountBookId("4e980d3a8b174e79960fae19cf0c62f3");
+        vo.setSearchDay(new Date());
+        vo.setPageNum(1);
+        vo.setPageSize(10);
+        ModelResult<SumThisDayExpensesResult> a = expensesService.sumThisDayExpenses(vo);
         System.out.println();
     }
 }

@@ -33,7 +33,7 @@ public enum SHErrorCode {
 	CHECK_LOGIN_PHONE_MESSAGE_FAILED(2002, "验证码错误"),
 	LOGIN_BLACK_LIST(2003, "本账号已被禁用"),
 	
-	// 纷享登录(3000-3999)
+	// 登录(3000-3999)
 	FS_SEND_SMCODE_FAIL(3000, "获取纷享验证码失败"),
 	FS_VERITY_SMCODE_FAIL(3001, "验证纷享验证码失败"),
 	FS_GET_ENTERPRISEUSER_LIST_FAIL(3002, "获取企业列表失败"),
