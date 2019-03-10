@@ -2,7 +2,8 @@
 spring:
   profiles:
     active: dev
-
+logging:
+  config:classpath:log/logback-spring.xml
   datasource:
     url: jdbc:mysql://localhost:3306/youtiao?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
     username: root
@@ -16,6 +17,7 @@ mybatis:
 
 server:
   port: 9090
+
 
 #
 ##默认使用配置
