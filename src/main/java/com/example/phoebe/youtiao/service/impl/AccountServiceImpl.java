@@ -21,12 +21,9 @@ import com.example.phoebe.youtiao.service.manager.AccountBookManager;
 import com.example.phoebe.youtiao.service.manager.AccountManager;
 import com.example.phoebe.youtiao.service.manager.RedisManager;
 import com.google.gson.Gson;
-import com.sun.tools.internal.ws.processor.modeler.Modeler;
-import io.swagger.annotations.ApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service("accountService")

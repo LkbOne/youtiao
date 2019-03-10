@@ -9,7 +9,6 @@ import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.controller.arg.Account.LoginArg;
 import com.example.phoebe.youtiao.controller.arg.Account.UpdateCustomDataArg;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @ApiOperation(value = "登陆")
+//    @ApiOperation(value = "登陆")
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<LoginResult> login(@RequestBody LoginArg arg){
         if(arg.isWrongParams()){
@@ -36,7 +35,7 @@ public class AccountController {
         return accountService.login(vo);
     }
 
-    @ApiOperation(value = "登陆")
+//    @ApiOperation(value = "登陆")
     @RequestMapping(value = "updateCustomData", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult updateCustomData(@RequestBody UpdateCustomDataArg arg){
         UpdateCustomDataVo vo = BeanUtil.copy(arg, UpdateCustomDataVo.class);

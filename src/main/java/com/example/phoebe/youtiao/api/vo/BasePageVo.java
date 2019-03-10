@@ -1,8 +1,6 @@
 package com.example.phoebe.youtiao.api.vo;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.ToString;
 
@@ -13,10 +11,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class BasePageVo extends BaseArg {
     // 当前页
-    @ApiModelProperty("当前页")
+//    @ApiModelProperty("当前页")
     private Integer pageNum;
     // 分页大小
-    @ApiModelProperty("分页大小")
+//    @ApiModelProperty("分页大小")
     private Integer pageSize;
 
     public int getOffset() {
