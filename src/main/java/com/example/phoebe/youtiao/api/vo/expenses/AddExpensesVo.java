@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 public class AddExpensesVo extends BaseArg {
@@ -16,7 +16,7 @@ public class AddExpensesVo extends BaseArg {
     String accountBookId;
 
     @ApiModelProperty(name = "expensesDate", notes = "消费日期")
-    Date expensesDate;
+    Date expenseDate;
 
     @ApiModelProperty(value = "description", notes = "名字")
     String description;

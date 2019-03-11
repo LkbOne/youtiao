@@ -1,4 +1,5 @@
 package com.example.phoebe.youtiao.dao.api;
+import com.example.phoebe.youtiao.api.dto.ExpensesGroupClassificationDto;
 import com.example.phoebe.youtiao.dao.entity.ExpensesEntity;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +22,6 @@ public interface ExpensesDao {
     List<ExpensesEntity> listExpensesByAccountBookId(@Param("accountBookId") String accountBookId, @Param("beginDate")Date beginDate,@Param("endDate") Date endDate, @Param("page") Page page);
 
     Float sumExpenses(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")Date beginDate, @Param("endDate") Date endDate);
+
+    List<ExpensesGroupClassificationDto> queryExpensesGroupClassificationByType(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")Date beginDate, @Param("endDate") Date endDate);
 }

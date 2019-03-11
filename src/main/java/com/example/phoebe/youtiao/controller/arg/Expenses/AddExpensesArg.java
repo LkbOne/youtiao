@@ -6,7 +6,8 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+
 
 @Data
 public class AddExpensesArg extends BaseArg {
@@ -18,7 +19,7 @@ public class AddExpensesArg extends BaseArg {
     String accountBookId;
 
     @ApiModelProperty(name = "expensesDate", notes = "消费日期")
-    Date expensesDate;
+    Date expenseDate;
 
     @ApiModelProperty(name = "description", notes = "备注", allowEmptyValue = true)
     String description;

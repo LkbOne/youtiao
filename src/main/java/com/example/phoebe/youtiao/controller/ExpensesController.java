@@ -1,6 +1,8 @@
 package com.example.phoebe.youtiao.controller;
 
 import com.example.phoebe.youtiao.api.ExpensesService;
+import com.example.phoebe.youtiao.api.result.EveryDayExpensesDetailResult;
+import com.example.phoebe.youtiao.api.result.ExpensesGroupClassificationByTypeStatisticResult;
 import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
 import com.example.phoebe.youtiao.api.result.SumThisDayExpensesResult;
 import com.example.phoebe.youtiao.api.vo.expenses.*;
@@ -13,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/expenses")
@@ -94,4 +98,30 @@ public class ExpensesController {
         SumThisDayExpensesVo vo = BeanUtil.copy(arg, SumThisDayExpensesVo.class);
         return expensesService.sumThisDayExpenses(vo);
     }
+    @TokenCheckTrigger
+    @ApiOperation(value = "分数组展示每一天的所有费用")
+    @RequestMapping(value = "showEveryDayExpensesDetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    ModelResult<List<List<EveryDayExpensesDetailResult>>> showEveryDayExpensesDetail(@RequestHeader String token, @RequestBody EveryDayExpensesDetailArg arg){
+        if(arg.isWrongParams()){
+            log.warn("ExpensesController.showEveryDayExpensesDetail arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        EveryDayExpensesDetailVo vo = BeanUtil.copy(arg, EveryDayExpensesDetailVo.class);
+        return expensesService.showEveryDayExpensesDetail(vo);
+    }
+
+    @TokenCheckTrigger
+    @ApiOperation(value = "报表的展示")
+    @RequestMapping(value = "expensesGroupClassificationByTypeStatistic", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    ModelResult<ExpensesGroupClassificationByTypeStatisticResult> expensesGroupClassificationByTypeStatistic(@RequestHeader String token, @RequestBody ExpensesGroupClassificationByTypeStatisticArg arg){
+        if(arg.isWrongParams()){
+            log.warn("ExpensesController.expensesGroupClassificationByTypeStatistic arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        ExpensesGroupClassificationByTypeStatisticVo vo = BeanUtil.copy(arg, ExpensesGroupClassificationByTypeStatisticVo.class);
+        return expensesService.expensesGroupClassificationByTypeStatistic(vo);
+    }
+
+
+
 }

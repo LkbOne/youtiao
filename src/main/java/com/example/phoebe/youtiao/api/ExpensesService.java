@@ -1,11 +1,11 @@
 package com.example.phoebe.youtiao.api;
 
-import com.example.phoebe.youtiao.api.result.ListExpensesByAccountBookIdResult;
-import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
-import com.example.phoebe.youtiao.api.result.SumThisDayExpensesResult;
+import com.example.phoebe.youtiao.api.result.*;
 import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
+
+import java.util.List;
 
 public interface ExpensesService {
     ModelResult addExpenses(AddExpensesVo vo);
@@ -19,4 +19,8 @@ public interface ExpensesService {
     ModelResult<PageResult<ListExpensesByAccountBookIdResult>> listExpenses(ListExpensesVo vo);
 
     ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(SumThisDayExpensesVo vo);
+
+    ModelResult<List<List<EveryDayExpensesDetailResult>>> showEveryDayExpensesDetail(EveryDayExpensesDetailVo vo);
+
+    ModelResult<ExpensesGroupClassificationByTypeStatisticResult> expensesGroupClassificationByTypeStatistic(ExpensesGroupClassificationByTypeStatisticVo vo);
 }

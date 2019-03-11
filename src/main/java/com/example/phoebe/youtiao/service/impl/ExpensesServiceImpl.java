@@ -1,9 +1,9 @@
 package com.example.phoebe.youtiao.service.impl;
 
 import com.example.phoebe.youtiao.api.ExpensesService;
-import com.example.phoebe.youtiao.api.result.ListExpensesByAccountBookIdResult;
-import com.example.phoebe.youtiao.api.result.QueryExpensesByIdResult;
-import com.example.phoebe.youtiao.api.result.SumThisDayExpensesResult;
+import com.example.phoebe.youtiao.api.dto.ExpensesGroupClassificationDto;
+import com.example.phoebe.youtiao.api.dto.SumInAndOutExpensesDto;
+import com.example.phoebe.youtiao.api.result.*;
 import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
@@ -15,13 +15,17 @@ import com.example.phoebe.youtiao.dao.api.AccountBookDao;
 import com.example.phoebe.youtiao.dao.api.ExpensesDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
 import com.example.phoebe.youtiao.dao.entity.ExpensesEntity;
+import com.example.phoebe.youtiao.service.manager.ExpensesManager;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.joda.time.DateTime;
 
+import javax.jws.WebParam;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +37,10 @@ public class ExpensesServiceImpl implements ExpensesService {
 
     @Autowired
     AccountBookDao accountBookDao;
+
+    @Autowired
+    ExpensesManager expensesManager;
+
     @Override
     public ModelResult addExpenses(AddExpensesVo vo) {
         AccountBookEntity accountBookEntity = accountBookDao.queryAccountBookById(vo.getAccountBookId());
@@ -98,23 +106,13 @@ public class ExpensesServiceImpl implements ExpensesService {
 
     @Override
     public ModelResult<PageResult<ListExpensesByAccountBookIdResult>> listExpenses(ListExpensesVo vo) {
-        System.out.println("ListAccountBookVo:" + vo.toString());
-        System.out.println("size:" + vo.getPageSize());
-        System.out.println("number:" + vo.getPageNum());
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        Date endDate = null;
-        Date beginDate = null;
-        if(null != vo.getRecentDay()){
-            endDate = new Date();
-            beginDate = new Date(endDate.getTime() - vo.getRecentDay() * DateUtil.ONE_DAY_MILLIS);
-        }
-        List<ExpensesEntity> expensesEntities = expensesDao.listExpensesByAccountBookId(vo.getAccountBookId(), beginDate, endDate, page);
+        List<ExpensesEntity> expensesEntities = expensesManager.listExpensesFromDayToDay(vo.getAccountBookId(), null,null, vo.getRecentDay(), page);
 
         List<ListExpensesByAccountBookIdResult> expensesByAccountBookIdResultList = Lists.newArrayList();
         for (ExpensesEntity expensesEntity : expensesEntities) {
-            System.out.println("accountBookList:" + expensesEntity.toString());
             ListExpensesByAccountBookIdResult expensesResult = BeanUtil.copy(expensesEntity, ListExpensesByAccountBookIdResult.class);
-            expensesResult.setCreateTime(expensesEntity.getExpenseDate().getTime());
+            expensesResult.setExpenseDate(expensesEntity.getExpenseDate().getTime());
             expensesResult.setCreateTime(expensesEntity.getCreateTime().getTime());
             expensesResult.setLastModifyTime(expensesEntity.getLastModifyTime().getTime());
 
@@ -132,13 +130,12 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 
     public ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(SumThisDayExpensesVo vo){
-        Date endDate = vo.getSearchDay();
-        Date beginDate = new Date(endDate.getTime() - DateUtil.ONE_DAY_MILLIS);
+        Date beginDate =  DateUtil.getBeginDate(vo.getSearchDay(), 1);
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        Float sumOutExpenses = expensesDao.sumExpenses( vo.getAccountBookId(),1, beginDate, endDate);
-        Float sumInExpenses = expensesDao.sumExpenses( vo.getAccountBookId(),0, beginDate, endDate);
+        Float sumOutExpenses = expensesDao.sumExpenses(vo.getAccountBookId(),1, beginDate, vo.getSearchDay());
+        Float sumInExpenses = expensesDao.sumExpenses(vo.getAccountBookId(),0, beginDate, vo.getSearchDay());
 
-        List<ExpensesEntity> expensesEntities = expensesDao.listExpensesByAccountBookId(vo.getAccountBookId(), beginDate, endDate, page);
+        List<ExpensesEntity> expensesEntities = expensesDao.listExpensesByAccountBookId(vo.getAccountBookId(), beginDate, new Date(), page);
 
         List<ListExpensesByAccountBookIdResult> expensesByAccountBookIdResultList = Lists.newArrayList();
         for (ExpensesEntity expensesEntity : expensesEntities) {
@@ -156,4 +153,54 @@ public class ExpensesServiceImpl implements ExpensesService {
         result.setListExpenses(expensesByAccountBookIdResultList);
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
+
+    public ModelResult<List<List<EveryDayExpensesDetailResult>>> showEveryDayExpensesDetail(EveryDayExpensesDetailVo vo){
+        Page page = new Page(1, 100, true);
+        List<ExpensesEntity> expensesEntityList = expensesManager.listExpensesFromDayToDay(vo.getAccountBookId(), null,null, vo.getRecentDay(), page);
+        List<List<EveryDayExpensesDetailResult>> resultLists = Lists.newArrayList();
+        Date endDate = DateUtil.getBeginDate(new Date(), 0);
+        for(int i = 0; i < vo.getRecentDay(); i++){
+            Date current = DateUtil.getTimesMorning(DateUtil.getBeginDate(new Date(), i));
+            List<EveryDayExpensesDetailResult> resultList = Lists.newArrayList();
+            if(CollectionUtils.isNotEmpty(expensesEntityList)) {
+                for (ExpensesEntity expensesEntity : expensesEntityList) {
+                    if (expensesEntity.getExpenseDate().getTime() >= current.getTime() && expensesEntity.getExpenseDate().getTime() < endDate.getTime()) {
+                        EveryDayExpensesDetailResult detailResult = BeanUtil.copy(expensesEntity, EveryDayExpensesDetailResult.class);
+                        detailResult.setTime(expensesEntity.getExpenseDate().getTime());
+                        resultList.add(detailResult);
+//                        expensesEntityList.remove(expensesEntity);
+                        // 不能remove
+                    }
+                }
+            }
+            endDate = current;
+            resultLists.add(resultList);
+        }
+        return new ModelResult<>(SHErrorCode.SUCCESS, resultLists);
+    }
+
+    public ModelResult<ExpensesGroupClassificationByTypeStatisticResult> expensesGroupClassificationByTypeStatistic(ExpensesGroupClassificationByTypeStatisticVo vo){
+
+        Date beginDate = null;
+        Date endDate = null;
+        if(null == vo.getMonth()){
+            beginDate = DateUtil.getTimesThisYear(vo.getYear());
+            endDate = DateUtil.getTimesThisYear(vo.getYear() + 1);
+        }else{
+            beginDate = DateUtil.getTimesThisMonth(vo.getYear(), vo.getMonth());
+            // 需要知道 month == 12 的时候的特殊情况
+            endDate = DateUtil.getTimesThisMonth(vo.getYear(), vo.getMonth() + 1);
+        }
+        SumInAndOutExpensesDto sumDto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, endDate, null);
+
+        ExpensesGroupClassificationByTypeStatisticResult result = BeanUtil.copy(sumDto, ExpensesGroupClassificationByTypeStatisticResult.class);
+
+        result.setInExpensesList(expensesManager.queryExpensesGroupClassificationByType(vo.getAccountBookId(), 0, beginDate, endDate));
+        result.setOutExpensesList(expensesManager.queryExpensesGroupClassificationByType(vo.getAccountBookId(), 1, beginDate, endDate));
+        result.setSurplus(sumDto.getTotalInExpenses() - sumDto.getTotalOutExpenses());
+
+        return new ModelResult<>(SHErrorCode.SUCCESS, result);
+    }
+
+
 }

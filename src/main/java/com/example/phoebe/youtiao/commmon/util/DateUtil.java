@@ -18,7 +18,7 @@ public class DateUtil {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss/SSS");
 
-    public static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
+    private static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -201,6 +201,43 @@ public class DateUtil {
         return (long) (cal.getTimeInMillis());
     }
 
+    // 获得指定年月第一天00:00:00点时间戳
+    public static Date getTimesThisMonth(Integer year, Integer month){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    // 获得指定年第一天00:00:00点时间戳
+    public static Date getTimesThisYear(Integer year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    // 获得指定天00:00:00点时间戳
+    public static Date getTimesMorning(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
     // 获得指定天24点时间戳
     public static Date getTimesNight(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -268,5 +305,12 @@ public class DateUtil {
         calendar.set(Calendar.YEAR, year);
         Date currYearFirst = calendar.getTime();
         return currYearFirst;
+    }
+
+    public static Date getBeginDate(Date endDate, Integer distance){
+        if(null == distance){
+            return endDate;
+        }
+        return new Date(endDate.getTime() - distance * ONE_DAY_MILLIS);
     }
 }
