@@ -13,7 +13,6 @@ import java.io.IOException;
 public class AccountManager {
     final String appid = "wxdb53550a763fe91e";
     final String secret = "cb2d87411aeb5c261bd05f9939d1dcb9";
-    String url = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code=";
 
     Gson gs = new Gson();
 
@@ -24,12 +23,15 @@ public class AccountManager {
     }
 
     public WxAuth getWxSession(String code){
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code=";
         url += code;
         url += "&grant_type=authorization_code";
         Response response = HttpClientUtil.doGet(url);
 
         try {
             String answear= response.getResponseBody();
+//            System.out.println("url:" + url);
+//            System.out.println("answear:" + answear);
             return gs.fromJson(answear, WxAuth.class);
         } catch (IOException e) {
             e.printStackTrace();

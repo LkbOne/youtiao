@@ -4,13 +4,16 @@ import com.example.phoebe.youtiao.api.ExpensesService;
 import com.example.phoebe.youtiao.api.dto.ExpensesGroupClassificationDto;
 import com.example.phoebe.youtiao.api.dto.SumInAndOutExpensesDto;
 import com.example.phoebe.youtiao.api.result.*;
+import com.example.phoebe.youtiao.api.vo.SumInAndOutExpensesVo;
 import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
+import com.example.phoebe.youtiao.commmon.enums.SumExpensesDateEnum;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.DateUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
+import com.example.phoebe.youtiao.commmon.util.result.BeginAndEndDateResult;
 import com.example.phoebe.youtiao.dao.api.AccountBookDao;
 import com.example.phoebe.youtiao.dao.api.ExpensesDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
@@ -128,28 +131,36 @@ public class ExpensesServiceImpl implements ExpensesService {
         return new ModelResult<>(SHErrorCode.SUCCESS, pageResult);
     }
 
+    public ModelResult<SumInAndOutExpensesResult> sumInAndOutExpenses(SumInAndOutExpensesVo vo){
+        BeginAndEndDateResult date = DateUtil.getBeginAndEndDate(vo.getDate(), vo.getType());
+        SumInAndOutExpensesDto sumDto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), date.getBeginDate(), date.getEndDate(), null);
+        SumInAndOutExpensesResult result = new SumInAndOutExpensesResult();
+        result.setSumInExpenses(sumDto.getTotalInExpenses());
+        result.setSumOutExpenses(sumDto.getTotalOutExpenses());
+        return new ModelResult<>(SHErrorCode.SUCCESS, result);
+    }
+
 
     public ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(SumThisDayExpensesVo vo){
-        Date beginDate =  DateUtil.getBeginDate(vo.getSearchDay(), 1);
-        Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        Float sumOutExpenses = expensesDao.sumExpenses(vo.getAccountBookId(),1, beginDate, vo.getSearchDay());
-        Float sumInExpenses = expensesDao.sumExpenses(vo.getAccountBookId(),0, beginDate, vo.getSearchDay());
+        BeginAndEndDateResult date = DateUtil.getBeginAndEndDate(vo.getSearchDay(), SumExpensesDateEnum.DAY.getType());
 
-        List<ExpensesEntity> expensesEntities = expensesDao.listExpensesByAccountBookId(vo.getAccountBookId(), beginDate, new Date(), page);
+        Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
+        SumInAndOutExpensesDto sumDto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), date.getBeginDate(), date.getEndDate(), null);
+
+        List<ExpensesEntity> expensesEntities = expensesManager.listExpensesFromDayToDay(vo.getAccountBookId(), date.getBeginDate(), date.getEndDate(), null, page);
 
         List<ListExpensesByAccountBookIdResult> expensesByAccountBookIdResultList = Lists.newArrayList();
         for (ExpensesEntity expensesEntity : expensesEntities) {
-            System.out.println("accountBookList:" + expensesEntity.toString());
             ListExpensesByAccountBookIdResult expensesResult = BeanUtil.copy(expensesEntity, ListExpensesByAccountBookIdResult.class);
-            expensesResult.setCreateTime(expensesEntity.getExpenseDate().getTime());
+            expensesResult.setExpenseDate(expensesEntity.getExpenseDate().getTime());
             expensesResult.setCreateTime(expensesEntity.getCreateTime().getTime());
             expensesResult.setLastModifyTime(expensesEntity.getLastModifyTime().getTime());
             expensesByAccountBookIdResultList.add(expensesResult);
         }
 
         SumThisDayExpensesResult result = new SumThisDayExpensesResult();
-        result.setSumInExpenses(sumInExpenses);
-        result.setSumOutExpenses(sumOutExpenses);
+        result.setSumInExpenses(sumDto.getTotalInExpenses());
+        result.setSumOutExpenses(sumDto.getTotalOutExpenses());
         result.setListExpenses(expensesByAccountBookIdResultList);
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
@@ -201,6 +212,4 @@ public class ExpensesServiceImpl implements ExpensesService {
 
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
-
-
 }

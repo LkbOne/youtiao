@@ -1,0 +1,105 @@
+<configuration scan="false" debug="false">
+
+	<appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/youtiao.log</file>
+		　<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>logs/youtiao-%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>300MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{12} %X{traceId} %X{userId} %msg%rEx{full,
+				java.lang.Thread,
+				javassist,
+				sun.reflect,
+				org.springframework,
+				org.apache,
+				org.eclipse.jetty,
+				$Proxy,
+				java.net,
+				java.io,
+				javax.servlet,
+				org.junit,
+				com.mysql,
+				com.sun,
+				org.mybatis.spring,
+				cglib,
+				CGLIB,
+				java.util.concurrent,
+				okhttp,
+				org.jboss,
+				}%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!--&lt;!&ndash;图片下载日志 &ndash;&gt;-->
+	<!--<appender name="picStatistic-data-file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>logs/fs-mankeep-pic-statistic.log</file>-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+			<!--<fileNamePattern>logs/fs-mankeep-pic-statistic-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>-->
+			<!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+				<!--<maxFileSize>300MB</maxFileSize>-->
+			<!--</timeBasedFileNamingAndTriggeringPolicy>-->
+		<!--</rollingPolicy>-->
+		<!--<append>true</append>-->
+		<!--<encoder  class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<pattern>[%d{yyyy/MM/dd-HH:mm:ss}] - %msg%n</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+	<!--<logger name="picStatisticLog" level="Debug" additivity="false">-->
+		<!--<appender-ref ref="picStatistic-data-file" />-->
+	<!--</logger>-->
+
+	<!--&lt;!&ndash;文章下载日志 &ndash;&gt;-->
+	<!--<appender name="articleStatistic-data-file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>logs/fs-mankeep-article-statistic.log</file>-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+			<!--<fileNamePattern>logs/fs-mankeep-article-statistic-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>-->
+			<!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+				<!--<maxFileSize>300MB</maxFileSize>-->
+			<!--</timeBasedFileNamingAndTriggeringPolicy>-->
+		<!--</rollingPolicy>-->
+		<!--<append>true</append>-->
+		<!--<encoder  class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<pattern>[%d{yyyy/MM/dd-HH:mm:ss}] - %msg%n</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+	<!--<logger name="articleStatisticLog" level="Debug" additivity="false">-->
+		<!--<appender-ref ref="articleStatistic-data-file" />-->
+	<!--</logger>-->
+
+	<!-- 异步输出日志避免阻塞服务 -->
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>512</queueSize>
+		<appender-ref ref="INFO_FILE"/>
+	</appender>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{12} %X{traceId} %X{userId} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<logger name="com.github.trace.listener" level="INFO" additivity="false">
+		<appender-ref ref="ASYNC" />
+		<appender-ref ref="CONSOLE"/>
+	</logger>
+
+	<!-- 限制第三方jar  日志输出  -->
+	<logger name="druid.sql" level="DEBUG"/>
+	<logger name="org.hibernate" level="WARN"/>
+	<logger name="org.springframework" level="WARN"/>
+	<logger name="org.apache" level="WARN"/>
+	<logger name="com.alibaba" level="WARN"/>
+	<logger name="com.github" level="WARN"/>
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="INFO_FILE"/>
+	</root>
+</configuration>

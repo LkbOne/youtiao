@@ -20,7 +20,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore
+//@Ignore
 public class ExpensesTest implements Serializable {
     @Autowired
     ExpensesService expensesService;
@@ -59,8 +59,8 @@ public class ExpensesTest implements Serializable {
     public void expensesGroupClassificationByTypeStatistic(){
         ExpensesGroupClassificationByTypeStatisticVo vo = new ExpensesGroupClassificationByTypeStatisticVo();
         vo.setAccountBookId("9ba4cd15b53b440486ec2e2bf7e2b563");
-        vo.setMonth(3);
-        vo.setYear(2019);
+
+
         ModelResult<ExpensesGroupClassificationByTypeStatisticResult> result  = expensesService.expensesGroupClassificationByTypeStatistic(vo);
         System.out.println();
     }

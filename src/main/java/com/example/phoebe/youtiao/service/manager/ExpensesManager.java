@@ -31,7 +31,7 @@ public class ExpensesManager {
     public List<ExpensesEntity> listExpensesFromDayToDay(String accountBookId, Date beginDate, Date endDate, Integer distance, Page page){
         doInitDate(beginDate, endDate, distance);
 
-        List<ExpensesEntity> expensesEntityList = expensesDao.listExpensesByAccountBookId(accountBookId, beginDate, endDate, page);
+        List<ExpensesEntity> expensesEntityList = expensesDao.listExpensesByAccountBookIdByExpenseDay(accountBookId, beginDate, endDate, page);
         if(CollectionUtils.isEmpty(expensesEntityList)){
             return Lists.newArrayList();
         }

@@ -21,6 +21,8 @@ public interface ExpensesDao {
 
     List<ExpensesEntity> listExpensesByAccountBookId(@Param("accountBookId") String accountBookId, @Param("beginDate")Date beginDate,@Param("endDate") Date endDate, @Param("page") Page page);
 
+    List<ExpensesEntity> listExpensesByAccountBookIdByExpenseDay(@Param("accountBookId") String accountBookId, @Param("beginDate")Date beginDate,@Param("endDate") Date endDate, @Param("page") Page page);
+
     Float sumExpenses(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")Date beginDate, @Param("endDate") Date endDate);
 
     List<ExpensesGroupClassificationDto> queryExpensesGroupClassificationByType(@Param("accountBookId") String accountBookId, @Param("type") Integer type, @Param("beginDate")Date beginDate, @Param("endDate") Date endDate);

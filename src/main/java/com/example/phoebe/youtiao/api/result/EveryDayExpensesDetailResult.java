@@ -7,7 +7,8 @@ import java.io.Serializable;
 @Data
 public class EveryDayExpensesDetailResult implements Serializable {
     Long time;
-    Long expense;
+    Float expenses;
     Integer type;
     Integer classification;
+    String description;
 }

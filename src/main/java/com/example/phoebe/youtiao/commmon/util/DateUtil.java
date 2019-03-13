@@ -1,5 +1,8 @@
 package com.example.phoebe.youtiao.commmon.util;
 
+import com.example.phoebe.youtiao.commmon.enums.SumExpensesDateEnum;
+import com.example.phoebe.youtiao.commmon.util.result.BeginAndEndDateResult;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 
@@ -202,6 +205,29 @@ public class DateUtil {
     }
 
     // 获得指定年月第一天00:00:00点时间戳
+    public static Date getTimesThisMonth(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date getTimesThisMonthLastDay(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+    // 获得指定年月第一天00:00:00点时间戳
     public static Date getTimesThisMonth(Integer year, Integer month){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -214,6 +240,44 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    public static Date getTimesThisMonthLastDay(Integer year, Integer month){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+
+    // 获得指定年第一天00:00:00点时间戳
+    public static Date getTimesThisYear(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date getTimesThisYearLastDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, 12);
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
     // 获得指定年第一天00:00:00点时间戳
     public static Date getTimesThisYear(Integer year) {
         Calendar cal = Calendar.getInstance();
@@ -226,6 +290,19 @@ public class DateUtil {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
+
+    public static Date getTimesThisYearLastDay(Integer year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, 12);
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
 
     // 获得指定天00:00:00点时间戳
     public static Date getTimesMorning(Date date) {
@@ -312,5 +389,31 @@ public class DateUtil {
             return endDate;
         }
         return new Date(endDate.getTime() - distance * ONE_DAY_MILLIS);
+    }
+
+    public static Date getEndDate(Date endDate, Integer distance){
+        if(null == distance){
+            return endDate;
+        }
+        return new Date(endDate.getTime() + distance * ONE_DAY_MILLIS);
+    }
+
+
+    public static BeginAndEndDateResult getBeginAndEndDate(Date beginDate, Integer type){
+        BeginAndEndDateResult result = new BeginAndEndDateResult();
+        if(type.equals(SumExpensesDateEnum.YEAR.getType())){
+            result.setBeginDate(DateUtil.getTimesThisYear(beginDate));
+            result.setEndDate(DateUtil.getTimesThisYearLastDay(beginDate));
+        }else if (type.equals(SumExpensesDateEnum.MONTH.getType())){
+            result.setBeginDate(getTimesThisMonth(beginDate));
+            result.setEndDate(getTimesThisMonthLastDay(beginDate));
+        }else if(type.equals(SumExpensesDateEnum.WEEK.getType())){
+
+        }else {
+
+            result.setBeginDate(DateUtil.getTimesMorning(beginDate));
+            result.setEndDate(DateUtil.getEndDate(DateUtil.getTimesMorning(beginDate), 1));
+        }
+        return result;
     }
 }

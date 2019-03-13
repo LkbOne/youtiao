@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ModelResult<LoginResult> login(LoginVo vo) {
-
+        System.out.println("loginVo:" + vo);
         AccountManager.WxAuth wxAuth = accountManager.getWxSession(vo.getCode());
         System.out.println("wxAuth :" +  wxAuth.toString());
         if(wxAuth == null || wxAuth.getOpenid() == null ){

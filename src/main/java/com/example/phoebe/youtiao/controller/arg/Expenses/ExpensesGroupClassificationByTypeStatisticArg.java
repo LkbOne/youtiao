@@ -4,6 +4,7 @@ import com.example.phoebe.youtiao.controller.arg.BaseArg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+
 @Data
 public class ExpensesGroupClassificationByTypeStatisticArg extends BaseArg {
     @ApiModelProperty(name = "accountBookId", notes = "账本id")

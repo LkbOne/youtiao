@@ -86,6 +86,16 @@
 
     </select>
 
+    <select id="listExpensesByAccountBookIdByExpenseDay" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM expenses
+        WHERE account_book_id = #{accountBookId}
+        <if test="beginDate!=null and endDate!=null">
+            and expense_date  between #{beginDate} and #{endDate}
+        </if>
+
+    </select>
+
     <select id="sumExpenses" parameterType="map" resultType="Float">
         SELECT sum(expenses) as expenses
         FROM expenses
@@ -107,7 +117,7 @@
         DELETE FROM expenses WHERE id=#{id}
     </delete>
 
-    <select id="queryExpensesGroupClassificationByType" parameterType="map" resultMap="BaseResultMap">
+    <select id="queryExpensesGroupClassificationByType" parameterType="map" resultType="com.example.phoebe.youtiao.api.dto.ExpensesGroupClassificationDto">
         select classification, sum(expenses) as total from expenses
         where account_book_id = #{accountBookId}
         and type = #{type}
