@@ -6,16 +6,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class BudgetEntity implements Serializable {
+public class TotalBudgetEntity implements Serializable {
     String id;
     String accountBookId;
-    Float budget;
-    Integer classification;
+    Float totalBudget;
     Float warnMoney;
-    Date beginTime;
-    Date endTime;
     Date createTime;
     Date lastModifyTime;
+    Date endTime;
+    Date beginTime;
 
-    String totalBudgetId;
 }

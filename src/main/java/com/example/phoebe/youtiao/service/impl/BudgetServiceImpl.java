@@ -10,10 +10,13 @@ import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
 import com.example.phoebe.youtiao.dao.api.AccountBookDao;
 import com.example.phoebe.youtiao.dao.api.BudgetDao;
+import com.example.phoebe.youtiao.dao.api.TotalBudgetDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
 import com.example.phoebe.youtiao.dao.entity.BudgetEntity;
+import com.example.phoebe.youtiao.dao.entity.TotalBudgetEntity;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
+import jdk.nashorn.internal.runtime.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,8 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Autowired
     AccountBookDao accountBookDao;
+    @Autowired
+    TotalBudgetDao totalBudgetDao;
 
     @Override
     public ModelResult addBudget(AddbudgetVo vo) {
@@ -34,9 +39,22 @@ public class BudgetServiceImpl implements BudgetService {
         if(null == accountBookEntity){
             return new ModelResult(SHErrorCode.NO_DATA);
         }
+        TotalBudgetEntity totalBudget  = totalBudgetDao.queryTotalBudgetByAccountBookId(vo.getAccountBookId());
+
+        if(totalBudget == null){
+            totalBudget = new TotalBudgetEntity();
+            totalBudget.setAccountBookId(vo.getAccountBookId());
+            totalBudget.setBeginTime(vo.getBeginTime());
+            totalBudget.setEndTime(vo.getEndTime());
+            totalBudget.setTotalBudget(vo.getBudget());
+            totalBudget.setWarnMoney(vo.getWarnMoney());
+            totalBudget.setId(UUIDUtil.getUUID());
+            totalBudgetDao.addTotalBudget(totalBudget);
+        }
 
         BudgetEntity budgetEntity = BeanUtil.copy(vo, BudgetEntity.class);
         budgetEntity.setId(UUIDUtil.getUUID());
+        budgetEntity.setTotalBudgetId(totalBudget.getId());
         if(budgetDao.addBudget(budgetEntity) != 1){
             return new ModelResult(SHErrorCode.ADD_FAIL);
         }
@@ -52,7 +70,6 @@ public class BudgetServiceImpl implements BudgetService {
         budgetEntity.setBudget(vo.getBudget());
         budgetEntity.setBeginTime(vo.getBeginTime());
         budgetEntity.setEndTime(vo.getEndTime());
-        budgetEntity.setType(vo.getType());
         if(budgetDao.updateBudget(budgetEntity) != 1){
             return new ModelResult(SHErrorCode.UPDATE_FAIL);
         }
@@ -72,7 +89,7 @@ public class BudgetServiceImpl implements BudgetService {
     public ModelResult<QueryBudgetByIdResult> queryBudgetById(QueryBudgetByIdVo vo) {
         BudgetEntity budgetEntity = budgetDao.queryBudgetById(vo.getId());
         if(null == budgetEntity){
-            return new ModelResult(SHErrorCode.NO_DATA);
+            return new ModelResult<>(SHErrorCode.NO_DATA);
         }
         QueryBudgetByIdResult result = BeanUtil.copy(budgetEntity, QueryBudgetByIdResult.class);
         result.setBeginTime(budgetEntity.getBeginTime().getTime());
@@ -85,20 +102,18 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Override
     public ModelResult<PageResult<ListBudgetByAccountIdResult>> listBudgetByAccountBookId(ListBudgetVo vo) {
-        System.out.println("ListBudgetVo:" + vo.toString());
-        System.out.println("size:" + vo.getPageSize());
-        System.out.println("number:" + vo.getPageNum());
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        List<BudgetEntity> budgetList = budgetDao.listBudgetByAccountBookId(vo.getAccountId(), page);
+        List<BudgetEntity> budgetList = budgetDao.listBudgetByAccountBookId(vo.getAccountBookId(), page);
 
         List<ListBudgetByAccountIdResult> listBudgetResults = Lists.newArrayList();
         for (BudgetEntity budget : budgetList) {
-            System.out.println("accountBookList:" + budget.toString());
-            ListBudgetByAccountIdResult ListBudgetByAccountIdResult = BeanUtil.copy(budget, ListBudgetByAccountIdResult.class);
+            ListBudgetByAccountIdResult listBudgetByAccountIdResult = BeanUtil.copy(budget, ListBudgetByAccountIdResult.class);
+            listBudgetByAccountIdResult.setBeginTime(budget.getBeginTime().getTime());
+            listBudgetByAccountIdResult.setEndTime(budget.getEndTime().getTime());
 
-            ListBudgetByAccountIdResult.setCreateTime(budget.getCreateTime().getTime());
-            ListBudgetByAccountIdResult.setLastModifyTime(budget.getLastModifyTime().getTime());
-            listBudgetResults.add(ListBudgetByAccountIdResult);
+            listBudgetByAccountIdResult.setCreateTime(budget.getCreateTime().getTime());
+            listBudgetByAccountIdResult.setLastModifyTime(budget.getLastModifyTime().getTime());
+            listBudgetResults.add(listBudgetByAccountIdResult);
         }
         PageResult<ListBudgetByAccountIdResult> pageResult = new PageResult<ListBudgetByAccountIdResult>();
         pageResult.setPageNum(vo.getPageNum());

@@ -11,4 +11,5 @@ public class EveryDayExpensesDetailResult implements Serializable {
     Integer type;
     Integer classification;
     String description;
+    String id;
 }

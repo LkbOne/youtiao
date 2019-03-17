@@ -81,7 +81,7 @@
         FROM expenses
         WHERE account_book_id = #{accountBookId}
         <if test="beginDate!=null and endDate!=null">
-            and create_time  between #{beginDate} and #{endDate}
+            and expense_date  between #{beginDate} and #{endDate}
         </if>
 
     </select>
@@ -102,7 +102,7 @@
         WHERE account_book_id = #{accountBookId}
         and type = #{type}
         <if test="beginDate!=null and endDate!=null">
-            and create_time  between #{beginDate} and #{endDate}
+            and expense_date  between #{beginDate} and #{endDate}
         </if>
     </select>
 
@@ -122,8 +122,8 @@
         where account_book_id = #{accountBookId}
         and type = #{type}
         <if test="beginDate!=null and endDate!=null">
-            and create_time  between #{beginDate} and #{endDate}
+            and expense_date  between #{beginDate} and #{endDate}
         </if>
-        group by classification
+        group by classification order by total desc
     </select>
 </mapper>

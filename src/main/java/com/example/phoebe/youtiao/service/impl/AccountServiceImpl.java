@@ -2,7 +2,9 @@ package com.example.phoebe.youtiao.service.impl;
 
 import com.example.phoebe.youtiao.api.AccountService;
 import com.example.phoebe.youtiao.api.result.LoginResult;
+import com.example.phoebe.youtiao.api.result.QueryCustomDataByIdResult;
 import com.example.phoebe.youtiao.api.vo.account.LoginVo;
+import com.example.phoebe.youtiao.api.vo.account.QueryCustomDataByIdVo;
 import com.example.phoebe.youtiao.api.vo.account.UpdateCustomDataVo;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
@@ -53,7 +55,6 @@ public class AccountServiceImpl implements AccountService {
     public ModelResult<LoginResult> login(LoginVo vo) {
         System.out.println("loginVo:" + vo);
         AccountManager.WxAuth wxAuth = accountManager.getWxSession(vo.getCode());
-        System.out.println("wxAuth :" +  wxAuth.toString());
         if(wxAuth == null || wxAuth.getOpenid() == null ){
             log.warn("AccountServiceImpl.login get openid by code fail code:{} ", vo.getCode());
             return new ModelResult<>(SHErrorCode.WX_USER_NOFOUND);
@@ -80,7 +81,6 @@ public class AccountServiceImpl implements AccountService {
             result.setAccountId(existWxAccountEntity.getAccountId());
             return new ModelResult<>(SHErrorCode.SUCCESS, result);
         }
-        System.out.println("111111111111111111111111111111111");
         String accountId = UUIDUtil.getUUID();
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId(accountId);
@@ -93,13 +93,11 @@ public class AccountServiceImpl implements AccountService {
             return new ModelResult<>(SHErrorCode.LOGIN_NEED_RELOGIN);
         }
 
-        System.out.printf("accountEntity:" + accountEntity.toString());
         if(accountDao.addAccount(accountEntity) != 1){
             log.warn("AccountServiceImpl.login bind account by openid fail accountEntity:{}", accountEntity);
             System.out.printf("AccountServiceImpl.login bind account by openid fail accoun");
             return new ModelResult<>(SHErrorCode.LOGIN_NEED_RELOGIN);
         }
-        System.out.println("222222222222222222222222222222222222222");
         WxAccountEntity wxAccountEntity = BeanUtil.copy(vo, WxAccountEntity.class);
         wxAccountEntity.setAccountId(accountId);
         wxAccountEntity.setId(UUIDUtil.getUUID());
@@ -117,9 +115,7 @@ public class AccountServiceImpl implements AccountService {
         accountBookEntity.setStatus(1);
         if(!accountBookManager.addAccountBook(accountBookEntity)){
             log.warn("AccountServiceImpl.login  insert account book fail accountBookEntity:{}", accountBookEntity);
-            System.out.println("AccountServiceImpl.login  insert account book fail accountBookEntity" + accountBookEntity.toString());
         }
-        System.out.println("4444444444444444444444444444");
         LoginResult result = new LoginResult();
         result.setToken(token);
         result.setAccountId(wxAccountEntity.getAccountId());
@@ -145,8 +141,18 @@ public class AccountServiceImpl implements AccountService {
             return new ModelResult(SHErrorCode.USER_ACCOUNT_NOT_EXIST);
         }
         AccountEntity updateEntity = BeanUtil.copy(vo, AccountEntity.class);
+        updateEntity.setId(vo.getAccountId());
         accountDao.updateAccount(updateEntity);
         return ModelResult.newSuccess();
     }
-
+    @Override
+    public ModelResult<QueryCustomDataByIdResult> queryCustomDataById(QueryCustomDataByIdVo vo){
+        AccountEntity entity = accountDao.queryAccountById(vo.getAccountId());
+        if(null == entity){
+            log.warn("AccountServiceImpl.UpdateCustomData entity is empty vo:{}", vo);
+            return new ModelResult<>(SHErrorCode.USER_ACCOUNT_NOT_EXIST);
+        }
+        QueryCustomDataByIdResult result = BeanUtil.copy(entity, QueryCustomDataByIdResult.class);
+        return new ModelResult<QueryCustomDataByIdResult>(SHErrorCode.SUCCESS, result);
+    }
 }

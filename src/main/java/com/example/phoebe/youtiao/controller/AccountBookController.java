@@ -76,7 +76,7 @@ public class AccountBookController {
     public ModelResult<GetAccountBookByIdResult> getAccountBookById(@RequestHeader String token, @RequestBody GetAccountBookByIdArg arg){
         if(arg.isWrongParams()){
             log.warn("");
-            return new ModelResult(SHErrorCode.PARAMS_ERROR);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
         }
         GetAccountBookByIdVo vo = BeanUtil.copy(arg, GetAccountBookByIdVo.class);
         return accountBookService.getAccountBookById(vo);

@@ -15,6 +15,10 @@ public class GetAccountBookByIdResult implements Serializable {
     Integer status;
     Long createTime;
     Long lastModifyTime;
+
+    String totalBudgetId;
+    Float totalBudgetMoney;
+
     @ApiModelProperty(name = "修改历史", notes = "1为这一次打开， 0为正常状态")
     Integer openHistory;
 }

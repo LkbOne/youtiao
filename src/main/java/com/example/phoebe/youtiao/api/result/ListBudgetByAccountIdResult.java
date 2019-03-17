@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class ListBudgetByAccountIdResult implements Serializable {
     String id;
     Float budget;
-    Integer status;
-    Integer type;
     Long beginTime;
     Long endTime;
     Long createTime;
     Long lastModifyTime;
+    Float warnMoney;
+    Integer classification;
 }

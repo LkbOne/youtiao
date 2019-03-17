@@ -15,9 +15,6 @@ public class UpdateBudgetVo extends BaseArg {
     @ApiModelProperty(name = "budget", notes = "预算")
     Float budget;
 
-    @ApiModelProperty(name = "type", notes = "预算类型（旅游，吃喝等）")
-    Integer type;
-
     @ApiModelProperty(name = "beginTime", notes = "开始时间")
     Date beginTime;
 
