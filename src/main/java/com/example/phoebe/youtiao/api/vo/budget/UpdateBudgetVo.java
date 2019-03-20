@@ -20,4 +20,7 @@ public class UpdateBudgetVo extends BaseArg {
 
     @ApiModelProperty(name = "endTime", notes = "结束时间")
     Date endTime;
+
+    @ApiModelProperty(name = "warnMoney", notes = "提醒金额")
+    Float warnMoney;
 }

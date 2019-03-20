@@ -1,13 +1,12 @@
 package com.example.phoebe.youtiao.budget;
 
 import com.example.phoebe.youtiao.api.BudgetService;
-import com.example.phoebe.youtiao.api.result.ListBudgetByAccountIdResult;
+import com.example.phoebe.youtiao.api.result.ListBudgetByAccountBookIdResult;
 import com.example.phoebe.youtiao.api.vo.budget.AddbudgetVo;
 import com.example.phoebe.youtiao.api.vo.budget.ListBudgetVo;
 import com.example.phoebe.youtiao.api.vo.budget.UpdateBudgetVo;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class BudgetTest {
         vo.setPageNum(1);
         vo.setPageSize(10);
 
-        ModelResult<PageResult<ListBudgetByAccountIdResult>> result = budgetService.listBudgetByAccountBookId(vo);
+        ModelResult<PageResult<ListBudgetByAccountBookIdResult>> result = budgetService.listBudgetByAccountBookId(vo);
         System.out.println();
     }
 }

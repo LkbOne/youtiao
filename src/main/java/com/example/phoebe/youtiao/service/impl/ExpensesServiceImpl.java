@@ -9,6 +9,7 @@ import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
+import com.example.phoebe.youtiao.commmon.enums.DateIntervalEnum;
 import com.example.phoebe.youtiao.commmon.enums.SumExpensesDateEnum;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.DateUtil;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.joda.time.DateTime;
 
 import javax.jws.WebParam;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -210,6 +212,58 @@ public class ExpensesServiceImpl implements ExpensesService {
         result.setOutExpensesList(expensesManager.queryExpensesGroupClassificationByType(vo.getAccountBookId(), 1, beginDate, endDate));
         result.setSurplus(sumDto.getTotalInExpenses() - sumDto.getTotalOutExpenses());
 
+        return new ModelResult<>(SHErrorCode.SUCCESS, result);
+    }
+
+    public ModelResult<ShowExpensesTreadResult> showExpensesTrendBetweenIntervalByAccountBookId(ShowExpensesTrendBetweenIntervalByAccountBookIdVo vo){
+
+        BeginAndEndDateResult dateResult = null;
+        ShowExpensesTreadResult result = new ShowExpensesTreadResult();
+        List<ShowExpensesTreadResult.TreadResult> inExpensesList = Lists.newArrayList();
+        List<ShowExpensesTreadResult.TreadResult> outExpensesList = Lists.newArrayList();
+        List<ShowExpensesTreadResult.TreadResult> surplusList = Lists.newArrayList();
+        if(vo.getInterval().equals(DateIntervalEnum.YEAR.getInterval())){
+           dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.YEAR.getType());
+           Date beginDate = dateResult.getBeginDate();
+           Date tmpEndDate = null;
+           Calendar tmpEndcal = DateUtil.getTimesThisYearByInteval(beginDate);
+            for(int i = 1; i <= 12; i++){
+                if(i != 12) {
+                    tmpEndcal.set(Calendar.MONTH, i);
+                    tmpEndDate = tmpEndcal.getTime();
+                }else{
+                    tmpEndDate = dateResult.getEndDate();
+                }
+                SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
+                Float surplus = dto.getTotalInExpenses() - dto.getTotalOutExpenses();
+                inExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalInExpenses(), beginDate));
+                outExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalOutExpenses(), beginDate));
+                surplusList.add(new ShowExpensesTreadResult.TreadResult(surplus, beginDate));
+                beginDate = tmpEndDate;
+            }
+        }
+        if(vo.getInterval().equals(DateIntervalEnum.MONTH.getInterval())){
+            dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.MONTH.getType());
+            Date beginDate = dateResult.getBeginDate();
+            Date endDate = dateResult.getEndDate();
+            while(beginDate.getTime() < endDate.getTime()){
+                Date tmpEndDate = DateUtil.getEndDate(beginDate, 1);
+
+                SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
+                Float surplus = dto.getTotalInExpenses() - dto.getTotalOutExpenses();
+
+                inExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalInExpenses(), beginDate));
+                outExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalOutExpenses(), beginDate));
+                surplusList.add(new ShowExpensesTreadResult.TreadResult(surplus, beginDate));
+                beginDate = tmpEndDate;
+            }
+
+        }
+        result.setInExpenses(inExpensesList);
+        result.setOutExpenses(outExpensesList);
+        result.setSurplus(surplusList);
+
+        System.out.println("showExpensesTrendBetweenIntervalByAccountBookId result:" + result.toString());
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
 }

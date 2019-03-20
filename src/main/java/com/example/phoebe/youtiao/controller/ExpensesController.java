@@ -132,6 +132,16 @@ public class ExpensesController {
         return expensesService.expensesGroupClassificationByTypeStatistic(vo);
     }
 
-
+    @TokenCheckTrigger
+    @ApiOperation(value = "展示某区间内的费用（收入，支出，结余）")
+    @RequestMapping(value = "showExpensesTrendBetweenIntervalByAccountBookId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    ModelResult<ShowExpensesTreadResult> showExpensesTrendBetweenIntervalByAccountBookId(@RequestHeader String token, @RequestBody ShowExpensesTrendBetweenIntervalByAccountBookIdArg arg){
+        if(arg.isWrongParams()){
+            log.warn("ExpensesController.showExpensesTrendBetweenIntervalByAccountBookId params error arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        ShowExpensesTrendBetweenIntervalByAccountBookIdVo vo = BeanUtil.copy(arg, ShowExpensesTrendBetweenIntervalByAccountBookIdVo.class);
+        return expensesService.showExpensesTrendBetweenIntervalByAccountBookId(vo);
+    }
 
 }

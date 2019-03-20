@@ -12,17 +12,9 @@ import java.sql.Date;
 public class UpdateExpensesArg extends BaseArg {
     @ApiModelProperty(name = "id", notes = "id")
     String id;
-//
-//   如果填写该字段，可以转换 费用
-//    @ApiModelProperty(name = "budgetId", notes = "budgetId", allowEmptyValue = true)
-//    String budgetId;
-//
-//    @ApiModelProperty(name = "accountBookId", notes = "accountBookId")
-//    String accountBookId;
 
     @ApiModelProperty(name = "expensesDate", notes = "消费时间")
     Date expensesDate;
-
 
     @ApiModelProperty(name = "description", notes = "备注", allowEmptyValue = true)
     String description;

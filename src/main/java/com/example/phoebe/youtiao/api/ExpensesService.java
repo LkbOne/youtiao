@@ -26,4 +26,7 @@ public interface ExpensesService {
     ModelResult<List<List<EveryDayExpensesDetailResult>>> showEveryDayExpensesDetail(EveryDayExpensesDetailVo vo);
 
     ModelResult<ExpensesGroupClassificationByTypeStatisticResult> expensesGroupClassificationByTypeStatistic(ExpensesGroupClassificationByTypeStatisticVo vo);
+
+    ModelResult<ShowExpensesTreadResult> showExpensesTrendBetweenIntervalByAccountBookId(ShowExpensesTrendBetweenIntervalByAccountBookIdVo vo);
+
 }

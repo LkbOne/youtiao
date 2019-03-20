@@ -21,6 +21,8 @@ public class DateUtil {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss/SSS");
 
+    private static final DateTimeFormatter DEFAULT_DATE_FORMAT_NO_HOUR = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     private static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -172,6 +174,10 @@ public class DateUtil {
         LocalDateTime ldt = dateConvertLocalDateTime(date);
         return DEFAULT_DATE_FORMAT_2.format(ldt);
     }
+    public static String formatNoHour(Date date) {
+        LocalDateTime ldt = dateConvertLocalDateTime(date);
+        return DEFAULT_DATE_FORMAT_NO_HOUR.format(ldt);
+    }
 
     public static String format(String pattern, Date date) {
         return new SimpleDateFormat(pattern).format(date);
@@ -258,7 +264,7 @@ public class DateUtil {
     public static Date getTimesThisYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.SECOND, 0);
@@ -289,6 +295,12 @@ public class DateUtil {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    public static Calendar getTimesThisYearByInteval(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
     public static Date getTimesThisYearLastDay(Integer year) {

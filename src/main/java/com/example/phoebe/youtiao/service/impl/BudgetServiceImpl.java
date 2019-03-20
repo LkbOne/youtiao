@@ -16,12 +16,13 @@ import com.example.phoebe.youtiao.dao.entity.BudgetEntity;
 import com.example.phoebe.youtiao.dao.entity.TotalBudgetEntity;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
-import jdk.nashorn.internal.runtime.Property;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service("budgetService")
 public class BudgetServiceImpl implements BudgetService {
 
@@ -37,6 +38,7 @@ public class BudgetServiceImpl implements BudgetService {
     public ModelResult addBudget(AddbudgetVo vo) {
         AccountBookEntity accountBookEntity = accountBookDao.queryAccountBookById(vo.getAccountBookId());
         if(null == accountBookEntity){
+            log.warn("BudgetServiceImpl.addBudget");
             return new ModelResult(SHErrorCode.NO_DATA);
         }
         TotalBudgetEntity totalBudget  = totalBudgetDao.queryTotalBudgetByAccountBookId(vo.getAccountBookId());
@@ -56,6 +58,7 @@ public class BudgetServiceImpl implements BudgetService {
         budgetEntity.setId(UUIDUtil.getUUID());
         budgetEntity.setTotalBudgetId(totalBudget.getId());
         if(budgetDao.addBudget(budgetEntity) != 1){
+            log.warn("BudgetServiceImpl.addBudget");
             return new ModelResult(SHErrorCode.ADD_FAIL);
         }
         return new ModelResult(SHErrorCode.SUCCESS);
@@ -65,12 +68,14 @@ public class BudgetServiceImpl implements BudgetService {
     public ModelResult updateBudget(UpdateBudgetVo vo) {
         BudgetEntity budgetEntity = budgetDao.queryBudgetById(vo.getId());
         if(null == budgetEntity){
+            log.warn("BudgetServiceImpl.updateBudget");
             return new ModelResult(SHErrorCode.UPDATE_FAIL);
         }
         budgetEntity.setBudget(vo.getBudget());
         budgetEntity.setBeginTime(vo.getBeginTime());
         budgetEntity.setEndTime(vo.getEndTime());
         if(budgetDao.updateBudget(budgetEntity) != 1){
+            log.warn("BudgetServiceImpl.updateBudget");
             return new ModelResult(SHErrorCode.UPDATE_FAIL);
         }
         return new ModelResult(SHErrorCode.SUCCESS);
@@ -80,6 +85,7 @@ public class BudgetServiceImpl implements BudgetService {
     @Override
     public ModelResult deleteBudgetById(DeleteBudgetVo vo) {
         if(budgetDao.deleteBudgetById(vo.getId()) != 1){
+            log.warn("BudgetServiceImpl.deleteBudgetById");
             return new ModelResult(SHErrorCode.DEL_FAIL);
         }
         return new ModelResult(SHErrorCode.SUCCESS);
@@ -89,6 +95,7 @@ public class BudgetServiceImpl implements BudgetService {
     public ModelResult<QueryBudgetByIdResult> queryBudgetById(QueryBudgetByIdVo vo) {
         BudgetEntity budgetEntity = budgetDao.queryBudgetById(vo.getId());
         if(null == budgetEntity){
+            log.warn("BudgetServiceImpl.queryBudgetById");
             return new ModelResult<>(SHErrorCode.NO_DATA);
         }
         QueryBudgetByIdResult result = BeanUtil.copy(budgetEntity, QueryBudgetByIdResult.class);
@@ -101,26 +108,24 @@ public class BudgetServiceImpl implements BudgetService {
 
 
     @Override
-    public ModelResult<PageResult<ListBudgetByAccountIdResult>> listBudgetByAccountBookId(ListBudgetVo vo) {
+    public ModelResult<PageResult<ListBudgetByAccountBookIdResult>> listBudgetByAccountBookId(ListBudgetVo vo) {
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
         List<BudgetEntity> budgetList = budgetDao.listBudgetByAccountBookId(vo.getAccountBookId(), page);
 
-        List<ListBudgetByAccountIdResult> listBudgetResults = Lists.newArrayList();
+        List<ListBudgetByAccountBookIdResult> listBudgetResults = Lists.newArrayList();
         for (BudgetEntity budget : budgetList) {
-            ListBudgetByAccountIdResult listBudgetByAccountIdResult = BeanUtil.copy(budget, ListBudgetByAccountIdResult.class);
+            ListBudgetByAccountBookIdResult listBudgetByAccountIdResult = BeanUtil.copy(budget, ListBudgetByAccountBookIdResult.class);
             listBudgetByAccountIdResult.setBeginTime(budget.getBeginTime().getTime());
             listBudgetByAccountIdResult.setEndTime(budget.getEndTime().getTime());
-
             listBudgetByAccountIdResult.setCreateTime(budget.getCreateTime().getTime());
             listBudgetByAccountIdResult.setLastModifyTime(budget.getLastModifyTime().getTime());
             listBudgetResults.add(listBudgetByAccountIdResult);
         }
-        PageResult<ListBudgetByAccountIdResult> pageResult = new PageResult<ListBudgetByAccountIdResult>();
+        PageResult<ListBudgetByAccountBookIdResult> pageResult = new PageResult<ListBudgetByAccountBookIdResult>();
         pageResult.setPageNum(vo.getPageNum());
         pageResult.setPageSize(vo.getPageSize());
         pageResult.setTotalCount(page.getPages());
         pageResult.setResult(listBudgetResults);
-        System.out.println("PageResult:" + pageResult.toString());
         return new ModelResult<>(SHErrorCode.SUCCESS, pageResult);
     }
 }

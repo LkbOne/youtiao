@@ -6,6 +6,7 @@ import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
+import com.example.phoebe.youtiao.commmon.util.DateUtil;
 import lombok.Data;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -70,6 +71,16 @@ public class ExpensesTest implements Serializable {
         vo.setAccountBookId("9ba4cd15b53b440486ec2e2bf7e2b563");
         vo.setRecentDay(4);
         ModelResult<List<List<EveryDayExpensesDetailResult>>> result = expensesService.showEveryDayExpensesDetail(vo);
+        System.out.println();
+    }
+
+    @Test
+    public void showExpensesTrendBetweenIntervalByAccountBookId(){
+        ShowExpensesTrendBetweenIntervalByAccountBookIdVo vo = new ShowExpensesTrendBetweenIntervalByAccountBookIdVo();
+        vo.setAccountBookId("9ba4cd15b53b440486ec2e2bf7e2b563");
+        vo.setDate(DateUtil.getTimesThisMonth(new Date()));
+        vo.setInterval(1);
+        ModelResult<ShowExpensesTreadResult> result = expensesService.showExpensesTrendBetweenIntervalByAccountBookId(vo);
         System.out.println();
     }
 }
