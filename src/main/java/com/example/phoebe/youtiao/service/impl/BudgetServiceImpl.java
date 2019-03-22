@@ -133,12 +133,16 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Override
     public ModelResult<PageResult<ListBudgetByAccountBookIdResult>> listBudgetByAccountBookId(ListBudgetVo vo) {
-        Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
-        List<BudgetEntity> budgetList = budgetDao.listBudgetByAccountBookId(vo.getAccountBookId(), page);
-
         List<ListBudgetByAccountBookIdResult> listBudgetResults = Lists.newArrayList();
-
         TotalBudgetEntity totalBudgetEntity = totalBudgetDao.queryTotalBudgetByAccountBookId(vo.getAccountBookId());
+        if(null == totalBudgetEntity) {
+            PageResult<ListBudgetByAccountBookIdResult> pageResult = new PageResult<ListBudgetByAccountBookIdResult>();
+            pageResult.setPageNum(vo.getPageNum());
+            pageResult.setPageSize(0);
+            pageResult.setResult(listBudgetResults);
+            return new ModelResult<>(SHErrorCode.SUCCESS, pageResult);
+        }
+
         ListBudgetByAccountBookIdResult totalBudgetByAccountIdResult = BeanUtil.copy(totalBudgetEntity, ListBudgetByAccountBookIdResult.class);
         Float spentMoney = expensesDao.sumExpenses(vo.getAccountBookId(), 1,null,totalBudgetEntity.getBeginTime(), totalBudgetEntity.getEndTime());
         totalBudgetByAccountIdResult.setSpentMoney(spentMoney != null ? spentMoney : 0);
@@ -150,6 +154,8 @@ public class BudgetServiceImpl implements BudgetService {
         totalBudgetByAccountIdResult.setLastModifyTime(totalBudgetEntity.getLastModifyTime().getTime());
         listBudgetResults.add(totalBudgetByAccountIdResult);
 
+        Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
+        List<BudgetEntity> budgetList = budgetDao.listBudgetByAccountBookId(vo.getAccountBookId(), page);
         for (BudgetEntity budget : budgetList) {
             ListBudgetByAccountBookIdResult listBudgetByAccountIdResult = BeanUtil.copy(budget, ListBudgetByAccountBookIdResult.class);
             listBudgetByAccountIdResult.setBeginTime(budget.getBeginTime().getTime());
