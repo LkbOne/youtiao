@@ -19,4 +19,8 @@ public interface BudgetDao {
     BudgetEntity queryBudgetById(@Param("id") String budgetId);
 
     List<BudgetEntity> listBudgetByAccountBookId(@Param("accountBookId") String accountBookId, @Param("page") Page page);
+
+    int countBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
+
+    Float sumBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
 }

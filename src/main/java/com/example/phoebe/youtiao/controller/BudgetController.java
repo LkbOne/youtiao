@@ -83,4 +83,28 @@ public class BudgetController  {
         ListBudgetVo vo = BeanUtil.copy(arg, ListBudgetVo.class);
         return budgetService.listBudgetByAccountBookId(vo);
     }
+
+    @TokenCheckTrigger
+    @ApiOperation(value = "添加总预算")
+    @RequestMapping(value = "addTotalBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult addTotalBudget(@RequestHeader String token, @RequestBody AddTotalBudgetArg arg){
+        if(arg.isWrongParams()){
+            log.warn("BudgetController.addTotalBudget arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        AddTotalBudgetVo vo = BeanUtil.copy(arg, AddTotalBudgetVo.class);
+        return budgetService.addTotalBudget(vo);
+    }
+
+    @TokenCheckTrigger
+    @ApiOperation(value = "更新总预算")
+    @RequestMapping(value = "updateTotalBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult updateTotalBudget(@RequestHeader String token, @RequestBody UpdateTotalBudgetArg arg){
+        if(arg.isWrongParams()){
+            log.warn("BudgetController.updateTotalBudget arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        UpdateTotalBudgetVo vo= BeanUtil.copy(arg, UpdateTotalBudgetVo.class);
+        return budgetService.updateTotalBudget(vo);
+    }
 }

@@ -19,7 +19,12 @@ public enum SHErrorCode {
 	NO_AUTH(-11, "暂未在灰度范围内,敬请期待"),
 	JSON_DESERIALIZATION_FAIL(-12, "JSON反序列化失败"),
 	THIRD_APPLICATION_ERROR(-13, "请求第三方响应异常"),
-	
+
+	// 預算
+	ADD_FAIL_MORE_THAN_TOTAL_BUDGET(101, "所添加預算金額超過總預算"),
+	NO_IN_TOTAL_BUDGET_TIME(102, "不在預算時間内"),
+	EXIST_TOTAL_BUDGET(103,"该账本存在总预算"),
+
 	// 微信(1000-1999)
 	REQUEST_WX_FAILED(1000, "获取微信后台数据失败"),
 	WX_RESPONSE_DATA_ERROR(1001, "微信后台数据错误"),

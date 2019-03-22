@@ -16,4 +16,8 @@ public interface BudgetService {
     ModelResult<QueryBudgetByIdResult> queryBudgetById(QueryBudgetByIdVo vo);
 
     ModelResult<PageResult<ListBudgetByAccountBookIdResult>> listBudgetByAccountBookId(ListBudgetVo vo);
+
+    ModelResult updateTotalBudget(UpdateTotalBudgetVo vo);
+
+    ModelResult addTotalBudget(AddTotalBudgetVo vo);
 }

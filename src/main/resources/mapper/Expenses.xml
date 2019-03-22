@@ -101,6 +101,9 @@
         FROM expenses
         WHERE account_book_id = #{accountBookId}
         and type = #{type}
+        <if test="classification!=null">
+            and classification=#{classification}
+        </if>
         <if test="beginDate!=null and endDate!=null">
             and expense_date  between #{beginDate} and #{endDate}
         </if>

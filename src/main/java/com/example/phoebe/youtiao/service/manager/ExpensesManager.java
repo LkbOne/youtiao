@@ -40,8 +40,8 @@ public class ExpensesManager {
 
     public SumInAndOutExpensesDto sumInAndOutExpenses(String accountBookId, Date beginDate, Date endDate, Integer distance){
         doInitDate(beginDate, endDate, distance);
-        Float totalInExpenses = expensesDao.sumExpenses(accountBookId, 0, beginDate, endDate);
-        Float totalOutExpenses = expensesDao.sumExpenses(accountBookId, 1, beginDate, endDate);
+        Float totalInExpenses = expensesDao.sumExpenses(accountBookId, 0, null,beginDate, endDate);
+        Float totalOutExpenses = expensesDao.sumExpenses(accountBookId, 1, null,beginDate, endDate);
         if(null == totalInExpenses){
             totalInExpenses = new Float(0);
         }

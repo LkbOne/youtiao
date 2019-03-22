@@ -13,6 +13,7 @@ public interface TotalBudgetDao {
 
     int deleteTotalBudgetById(@Param("id") String id);
 
-    int queryTotalBudgetById(@Param("id") String id);
+    TotalBudgetEntity queryTotalBudgetById(@Param("id") String id);
+
     TotalBudgetEntity queryTotalBudgetByAccountBookId(@Param("accountBookId") String accountBookId);
 }

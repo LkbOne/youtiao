@@ -181,8 +181,6 @@ public class ExpensesServiceImpl implements ExpensesService {
                         EveryDayExpensesDetailResult detailResult = BeanUtil.copy(expensesEntity, EveryDayExpensesDetailResult.class);
                         detailResult.setTime(expensesEntity.getExpenseDate().getTime());
                         resultList.add(detailResult);
-//                        expensesEntityList.remove(expensesEntity);
-                        // 不能remove
                     }
                 }
             }
@@ -222,6 +220,8 @@ public class ExpensesServiceImpl implements ExpensesService {
         List<ShowExpensesTreadResult.TreadResult> inExpensesList = Lists.newArrayList();
         List<ShowExpensesTreadResult.TreadResult> outExpensesList = Lists.newArrayList();
         List<ShowExpensesTreadResult.TreadResult> surplusList = Lists.newArrayList();
+        boolean hasInExpenses = false;
+        boolean hasOutExpenses = false;
         if(vo.getInterval().equals(DateIntervalEnum.YEAR.getInterval())){
            dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.YEAR.getType());
            Date beginDate = dateResult.getBeginDate();
@@ -236,6 +236,8 @@ public class ExpensesServiceImpl implements ExpensesService {
                 }
                 SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
                 Float surplus = dto.getTotalInExpenses() - dto.getTotalOutExpenses();
+                hasInExpenses = hasInExpenses || (!hasInExpenses && dto.getTotalInExpenses() != 0);
+                hasOutExpenses = hasOutExpenses || (!hasOutExpenses && dto.getTotalOutExpenses() != 0);
                 inExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalInExpenses(), beginDate));
                 outExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalOutExpenses(), beginDate));
                 surplusList.add(new ShowExpensesTreadResult.TreadResult(surplus, beginDate));
@@ -251,7 +253,8 @@ public class ExpensesServiceImpl implements ExpensesService {
 
                 SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
                 Float surplus = dto.getTotalInExpenses() - dto.getTotalOutExpenses();
-
+                hasInExpenses = hasInExpenses || (!hasInExpenses && dto.getTotalInExpenses() != 0);
+                hasOutExpenses = hasOutExpenses || (!hasOutExpenses && dto.getTotalOutExpenses() != 0);
                 inExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalInExpenses(), beginDate));
                 outExpensesList.add(new ShowExpensesTreadResult.TreadResult(dto.getTotalOutExpenses(), beginDate));
                 surplusList.add(new ShowExpensesTreadResult.TreadResult(surplus, beginDate));
@@ -259,11 +262,10 @@ public class ExpensesServiceImpl implements ExpensesService {
             }
 
         }
-        result.setInExpenses(inExpensesList);
-        result.setOutExpenses(outExpensesList);
-        result.setSurplus(surplusList);
 
-        System.out.println("showExpensesTrendBetweenIntervalByAccountBookId result:" + result.toString());
+        result.setInExpenses(hasInExpenses?inExpensesList:Lists.newArrayList());
+        result.setOutExpenses(hasOutExpenses?outExpensesList:Lists.newArrayList());
+        result.setSurplus(((!hasInExpenses)&&(!hasOutExpenses))?Lists.newArrayList():surplusList);
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
 }

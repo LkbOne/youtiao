@@ -80,4 +80,16 @@
         DELETE FROM budget WHERE id=#{id}
     </delete>
 
+
+    <select id="countBudgetByTotalBudgetId" parameterType="map" resultType="int">
+        SELECT count(1)
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+    </select>
+
+    <select id="sumBudgetByTotalBudgetId" parameterType="map" resultType="Float">
+        SELECT sum(budget)
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+    </select>
 </mapper>

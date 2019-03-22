@@ -14,4 +14,5 @@ public class ListBudgetByAccountBookIdResult implements Serializable {
     Long lastModifyTime;
     Float warnMoney;
     Integer classification;
+    Float spentMoney;
 }
