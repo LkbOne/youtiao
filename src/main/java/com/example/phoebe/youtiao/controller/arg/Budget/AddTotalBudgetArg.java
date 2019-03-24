@@ -26,6 +26,11 @@ public class AddTotalBudgetArg extends BaseArg {
         if(StringUtils.isEmpty(accountBookId)){
             return true;
         }
-        return false;
+        if(null == beginTime || null == endTime){
+            return true;
+        }
+
+        return beginTime.getTime() > endTime.getTime();
+
     }
 }

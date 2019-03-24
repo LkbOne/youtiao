@@ -11,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,7 +23,7 @@ public class BudgetManager {
     /**
      * {@link JudgeBudgetEnum}
     */
-    public SHErrorCode judge(TotalBudgetEntity totalBudget, BudgetEntity budget){
+    public SHErrorCode judgeBudget(TotalBudgetEntity totalBudget, BudgetEntity budget){
         // 都没问题 0
         // 不在总预算的时间内 1
         // 超过了总预算 2
@@ -37,10 +38,9 @@ public class BudgetManager {
         Float totalHasBudget = budgetDao.sumBudgetByTotalBudgetId(totalBudget.getId());
         totalHasBudget = totalHasBudget == null ? new Float(0) : totalHasBudget;
         if (totalHasBudget + budget.getBudget() > totalBudget.getTotalBudget()) {
-            log.warn("BudgetServiceImpl.addBudget vo:{}, totalHasBudget:{}, totalBudget:{}", budget, totalHasBudget, totalBudget);
+            log.warn("BudgetManager.judgeBudget vo:{}, totalHasBudget:{}, totalBudget:{}", budget, totalHasBudget, totalBudget);
             return SHErrorCode.MORE_THAN_TOTAL_BUDGET;
         }
-
 
         List<ListIntervalOfBudgetDto> timeIntervalList= budgetDao.listTimeByTotalBudgetIdAndClassification(totalBudget.getId(), budget.getClassification(), budget.getId());
         if(CollectionUtils.isNotEmpty(timeIntervalList)){
@@ -70,6 +70,31 @@ public class BudgetManager {
             return SHErrorCode.HAS_MIXED_THIS_CLASSIFICATION_BUDGET_TIME_INTERVAL;
         }
 
+        return SHErrorCode.SUCCESS;
+    }
+
+    public SHErrorCode judgeTotalBudget(TotalBudgetEntity totalBudget){
+        if(null == totalBudget){
+            return SHErrorCode.SYSTEM_ERROR;
+        }
+        Float totalHasBudget = budgetDao.sumBudgetByTotalBudgetId(totalBudget.getId());
+        totalHasBudget = totalHasBudget == null ? new Float(0) : totalHasBudget;
+        if (totalHasBudget > totalBudget.getTotalBudget()) {
+            log.warn("BudgetManager.judgeTotalBudget totalHasBudget:{}, totalBudget:{}", totalHasBudget, totalBudget);
+            return SHErrorCode.LESS_THAN_TOTAL_BUDGET;
+        }
+
+        Date beginTime = budgetDao.queryEarliestBeginTimeByTotalBudgetId(totalBudget.getId(), 1);
+        if(beginTime.getTime() < totalBudget.getBeginTime().getTime()){
+            log.warn("BudgetManager.judgeTotalBudget beginTime:{}, totalBudget:{}", beginTime.getTime(), totalBudget);
+            return SHErrorCode.LESS_THAN_TOTAL_BUDGET_TIME;
+        }
+
+        Date endTime = budgetDao.queryLatestEndTimeByTotalBudgetId(totalBudget.getId(), 1);
+        if(endTime.getTime() > totalBudget.getEndTime().getTime()){
+            log.warn("BudgetManager.judgeTotalBudget endTime:{}, totalBudget:{}", endTime, totalBudget);
+            return SHErrorCode.MORE_THAN_TOTAL_BUDGET_TIME;
+        }
         return SHErrorCode.SUCCESS;
     }
 }

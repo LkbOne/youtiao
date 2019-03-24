@@ -6,7 +6,6 @@ import com.example.phoebe.youtiao.api.vo.budget.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
-import com.example.phoebe.youtiao.commmon.enums.JudgeBudgetEnum;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
 import com.example.phoebe.youtiao.dao.api.AccountBookDao;
@@ -65,7 +64,7 @@ public class BudgetServiceImpl implements BudgetService {
 
         BudgetEntity budgetEntity = BeanUtil.copy(vo, BudgetEntity.class);
 
-        SHErrorCode judgeEnum = budgetManager.judge(totalBudget, budgetEntity);
+        SHErrorCode judgeEnum = budgetManager.judgeBudget(totalBudget, budgetEntity);
         if(judgeEnum != SHErrorCode.SUCCESS){
             log.warn("BudgetServiceImpl.addBudget vo.getBeginTime():{}, vo.getEndTime():{}, " +
                     "totalBudget.getBeginTime():{},  totalBudget.getEndTime():{}", budgetEntity.getBeginTime(), budgetEntity.getEndTime(), totalBudget.getBeginTime(), totalBudget.getEndTime());
@@ -100,7 +99,7 @@ public class BudgetServiceImpl implements BudgetService {
         budgetEntity.setEndTime(vo.getEndTime());
 
         TotalBudgetEntity totalBudget = totalBudgetDao.queryTotalBudgetById(budgetEntity.getTotalBudgetId());
-        SHErrorCode judgeEnum = budgetManager.judge(totalBudget, budgetEntity);
+        SHErrorCode judgeEnum = budgetManager.judgeBudget(totalBudget, budgetEntity);
 
         if(judgeEnum != SHErrorCode.SUCCESS){
             log.warn("BudgetServiceImpl.updateBudget vo.getBeginTime():{}, vo.getEndTime():{}, " +
@@ -123,11 +122,22 @@ public class BudgetServiceImpl implements BudgetService {
             log.warn("BudgetServiceImpl.deleteBudgetById vo:{}", vo);
             return new ModelResult(SHErrorCode.DEL_FAIL);
         }
-//        if (budgetDao.countBudgetByTotalBudgetId(budgetEntity.getTotalBudgetId()) == 0) {
-//            if (totalBudgetDao.deleteTotalBudgetById(budgetEntity.getTotalBudgetId()) != 1) {
-//                log.warn("BudgetServiceImpl.deleteBudgetById vo:{} ,budgetEntity:{}", vo, budgetEntity);
-//            }
-//        }
+        return new ModelResult(SHErrorCode.SUCCESS);
+    }
+
+    @Override
+    public ModelResult deleteTotalBudgetById(DeleteTotalBudgetVo vo) {
+
+        budgetDao.deleteBudgetByTotalBudgetId(vo.getId());
+
+        if (budgetDao.countBudgetByTotalBudgetId(vo.getId()) == 0) {
+            if (totalBudgetDao.deleteTotalBudgetById(vo.getId()) != 1) {
+                log.warn("BudgetServiceImpl.deleteTotalBudgetById vo:{}}", vo);
+                return new ModelResult(SHErrorCode.DEL_FAIL);
+            }
+        }else {
+            return new ModelResult(SHErrorCode.DEL_FAIL);
+        }
         return new ModelResult(SHErrorCode.SUCCESS);
     }
 
@@ -194,13 +204,21 @@ public class BudgetServiceImpl implements BudgetService {
     public ModelResult updateTotalBudget(UpdateTotalBudgetVo vo) {
         TotalBudgetEntity totalBudget = totalBudgetDao.queryTotalBudgetById(vo.getId());
         if (null == totalBudget) {
-            log.warn("BudgetServiceImpl.updateTotalBudget vo:{}, totalBudget{}", vo, totalBudget);
+            log.warn("BudgetServiceImpl.updateTotalBudget totalBudget is null  vo:{}", vo);
             return new ModelResult(SHErrorCode.NO_DATA);
         }
         totalBudget.setTotalBudget(vo.getTotalBudget());
         totalBudget.setWarnMoney(vo.getWarnMoney());
         totalBudget.setEndTime(vo.getEndTime());
         totalBudget.setBeginTime(vo.getBeginTime());
+
+        SHErrorCode judgeTotalBudget = budgetManager.judgeTotalBudget(totalBudget);
+
+        if(judgeTotalBudget != SHErrorCode.SUCCESS){
+            log.warn("BudgetServiceImpl.updateTotalBudget vo:{}  totalBudget:{}  judgeTotalBudget:{}", vo, totalBudget, judgeTotalBudget);
+            return new ModelResult(judgeTotalBudget);
+        }
+
         if (totalBudgetDao.updateTotalBudget(totalBudget) != 1) {
             log.warn("BudgetServiceImpl.updateTotalBudget vo:{}, totalBudget{}", vo, totalBudget);
             return new ModelResult(SHErrorCode.UPDATE_FAIL);

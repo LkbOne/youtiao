@@ -26,7 +26,9 @@ public enum SHErrorCode {
 	NO_IN_TOTAL_BUDGET_TIME(102, "开始与结束时间不位于预算時間区间内"),
 	EXIST_TOTAL_BUDGET(103,"该账本存在总预算"),
 	HAS_MIXED_THIS_CLASSIFICATION_BUDGET_TIME_INTERVAL(104, "与该种类的预算有时间重叠"),
-
+	LESS_THAN_TOTAL_BUDGET(105, "预算金额低于总预算"),
+	LESS_THAN_TOTAL_BUDGET_TIME(106, "预算结束时间过低"),
+	MORE_THAN_TOTAL_BUDGET_TIME(107, "预算开始时间过高"),
 	// 微信(1000-1999)
 	REQUEST_WX_FAILED(1000, "获取微信后台数据失败"),
 	WX_RESPONSE_DATA_ERROR(1001, "微信后台数据错误"),

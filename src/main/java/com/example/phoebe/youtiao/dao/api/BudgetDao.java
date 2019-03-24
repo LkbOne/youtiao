@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -24,6 +25,13 @@ public interface BudgetDao {
 
     Float sumBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
 
+    void deleteBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
+
+
     List<ListIntervalOfBudgetDto> listTimeByTotalBudgetIdAndClassification(@Param("totalBudgetId") String totalBudgetId,
                                                                            @Param("classification") Integer classification, @Param("id") String id);
+
+    Date queryEarliestBeginTimeByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId, @Param("limit") Integer limit);
+
+    Date queryLatestEndTimeByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId, @Param("limit") Integer limit);
 }

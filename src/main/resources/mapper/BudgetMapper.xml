@@ -80,6 +80,9 @@
         DELETE FROM budget WHERE id=#{id}
     </delete>
 
+    <delete id="deleteBudgetByTotalBudgetId" parameterType="map">
+        DELETE FROM budget WHERE total_budget_id=#{totalBudgetId}
+    </delete>
 
     <select id="countBudgetByTotalBudgetId" parameterType="map" resultType="int">
         SELECT count(1)
@@ -93,7 +96,7 @@
         WHERE total_budget_id = #{totalBudgetId}
     </select>
     <select id="listTimeByTotalBudgetIdAndClassification" parameterType="map" resultType="com.example.phoebe.youtiao.api.dto.ListIntervalOfBudgetDto">
-        SELECT id, beginTime, endTime
+        SELECT id, begin_time, end_time
         FROM budget
         WHERE total_budget_id = #{totalBudgetId}
         AND
@@ -102,4 +105,19 @@
          AND `id` = #{id}
         </if>
     </select>
+    <select id="queryEarliestBeginTimeByTotalBudgetId" parameterMap="map" resultType="java.util.Date">
+        SELECT begin_time
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        order by begin_time
+        limit #{limit}
+    </select>
+    <select id="queryLatestEndTimeByTotalBudgetId" parameterMap="map" resultType="java.util.Date">
+        SELECT end_time
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        ORDER BY end_time DESC
+        limit #{limit}
+    </select>
+
 </mapper>

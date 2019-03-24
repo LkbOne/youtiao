@@ -60,6 +60,19 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
+    @ApiOperation(value = "删除总预算")
+    @RequestMapping(value = "deleteTotalBudgetById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+    public ModelResult deleteTotalBudgetById(@RequestHeader String token, @RequestBody DeleteTotalBudgetArg arg){
+        if(arg.isWrongParams()){
+            log.warn("BudgetController.deleteTotalBudgetById arg:{}", arg);
+            return new ModelResult(SHErrorCode.PARAMS_ERROR);
+        }
+
+        DeleteTotalBudgetVo vo = BeanUtil.copy(arg, DeleteTotalBudgetVo.class);
+        return budgetService.deleteTotalBudgetById(vo);
+    }
+
+    @TokenCheckTrigger
     @ApiOperation(value = "通过id获得预算详情")
     @RequestMapping(value = "queryBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<QueryBudgetByIdResult> queryBudgetById(@RequestHeader String token, @RequestBody QueryBudgetByIdArg arg){

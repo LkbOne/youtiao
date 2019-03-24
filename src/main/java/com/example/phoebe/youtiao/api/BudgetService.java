@@ -13,6 +13,8 @@ public interface BudgetService {
 
     ModelResult deleteBudgetById(DeleteBudgetVo vo);
 
+    ModelResult deleteTotalBudgetById(DeleteTotalBudgetVo vo);
+
     ModelResult<QueryBudgetByIdResult> queryBudgetById(QueryBudgetByIdVo vo);
 
     ModelResult<PageResult<ListBudgetByAccountBookIdResult>> listBudgetByAccountBookId(ListBudgetVo vo);
