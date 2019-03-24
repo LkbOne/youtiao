@@ -1,6 +1,6 @@
 package com.example.phoebe.youtiao.dao.api;
 
-import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
+import com.example.phoebe.youtiao.api.dto.ListIntervalOfBudgetDto;
 import com.example.phoebe.youtiao.dao.entity.BudgetEntity;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +23,7 @@ public interface BudgetDao {
     int countBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
 
     Float sumBudgetByTotalBudgetId(@Param("totalBudgetId") String totalBudgetId);
+
+    List<ListIntervalOfBudgetDto> listTimeByTotalBudgetIdAndClassification(@Param("totalBudgetId") String totalBudgetId,
+                                                                           @Param("classification") Integer classification, @Param("id") String id);
 }

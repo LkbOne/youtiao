@@ -92,4 +92,14 @@
         FROM budget
         WHERE total_budget_id = #{totalBudgetId}
     </select>
+    <select id="listTimeByTotalBudgetIdAndClassification" parameterType="map" resultType="com.example.phoebe.youtiao.api.dto.ListIntervalOfBudgetDto">
+        SELECT id, beginTime, endTime
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        AND
+        classification = #{classification}
+        <if test="id != null">
+         AND `id` = #{id}
+        </if>
+    </select>
 </mapper>

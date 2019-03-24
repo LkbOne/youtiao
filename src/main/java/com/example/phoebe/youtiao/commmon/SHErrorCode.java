@@ -21,9 +21,11 @@ public enum SHErrorCode {
 	THIRD_APPLICATION_ERROR(-13, "请求第三方响应异常"),
 
 	// 預算
-	ADD_FAIL_MORE_THAN_TOTAL_BUDGET(101, "所添加預算金額超過總預算"),
-	NO_IN_TOTAL_BUDGET_TIME(102, "不在預算時間内"),
+
+	MORE_THAN_TOTAL_BUDGET(101, "预算金额超過总预算"),
+	NO_IN_TOTAL_BUDGET_TIME(102, "开始与结束时间不位于预算時間区间内"),
 	EXIST_TOTAL_BUDGET(103,"该账本存在总预算"),
+	HAS_MIXED_THIS_CLASSIFICATION_BUDGET_TIME_INTERVAL(104, "与该种类的预算有时间重叠"),
 
 	// 微信(1000-1999)
 	REQUEST_WX_FAILED(1000, "获取微信后台数据失败"),
