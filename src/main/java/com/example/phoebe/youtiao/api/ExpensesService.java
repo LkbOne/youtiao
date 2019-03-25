@@ -29,4 +29,5 @@ public interface ExpensesService {
 
     ModelResult<ShowExpensesTreadResult> showExpensesTrendBetweenIntervalByAccountBookId(ShowExpensesTrendBetweenIntervalByAccountBookIdVo vo);
 
+    ExportExpensesInfoResult exportExpensesInfoToExcel(ExportExcelVo vo);
 }

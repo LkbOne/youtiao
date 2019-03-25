@@ -1,5 +1,6 @@
 package com.example.phoebe.youtiao.controller;
 
+import com.example.phoebe.youtiao.api.AccountBookService;
 import com.example.phoebe.youtiao.api.ExpensesService;
 import com.example.phoebe.youtiao.api.result.*;
 import com.example.phoebe.youtiao.api.vo.SumInAndOutExpensesVo;
@@ -7,14 +8,23 @@ import com.example.phoebe.youtiao.api.vo.expenses.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
+import com.example.phoebe.youtiao.commmon.enums.ExcelConfigEnum;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
+import com.example.phoebe.youtiao.commmon.util.DateUtil;
+import com.example.phoebe.youtiao.commmon.util.ExcelUtil;
 import com.example.phoebe.youtiao.controller.arg.Expenses.*;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.*;
 
 @RestController
 @RequestMapping("/expenses")
@@ -22,6 +32,9 @@ import java.util.List;
 public class ExpensesController {
     @Autowired
     ExpensesService expensesService;
+
+    @Autowired
+    AccountBookService accountBookService;
 
     @TokenCheckTrigger
     @ApiOperation(value = "添加花费")
@@ -144,4 +157,81 @@ public class ExpensesController {
         return expensesService.showExpensesTrendBetweenIntervalByAccountBookId(vo);
     }
 
+    @TokenCheckTrigger
+    @ApiOperation(value = "导出excel， 月或这年报表")
+    @RequestMapping(value = "exportExcel", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    void exportExcel(@RequestBody ExportExcelArg arg, HttpServletResponse httpServletResponse) throws Exception {
+        if(arg.isWrongParams()){
+            log.warn("ExpensesController.exportExcel params error arg:{}", arg);
+            return;
+        }
+
+        ExportExcelVo vo = BeanUtil.copy(arg, ExportExcelVo.class);
+        ExportExpensesInfoResult resultModelResult = expensesService.exportExpensesInfoToExcel(vo);
+        Long startTime = resultModelResult.getBeginTime().getTime();
+        Long endTime = resultModelResult.getEndTime().getTime();
+        StringBuilder title = new StringBuilder(resultModelResult.getAccountBookName());
+        String filename = doGenerateActivityEnrollFilename(startTime, endTime, title).toString();
+        Map<ExcelConfigEnum, Object> excelConfigMap = new LinkedHashMap<>();
+        excelConfigMap.put(ExcelConfigEnum.FILE_NAME, filename);
+        excelConfigMap.put(ExcelConfigEnum.SHEET_NAME, "enrollSheet");
+        excelConfigMap.put(ExcelConfigEnum.CONTENT_TYPE, "application/octet-stream");
+        XSSFWorkbook xssfWorkbook = ExcelUtil.generateXSSFExcel();
+        XSSFSheet xssfSheet = xssfWorkbook.createSheet(excelConfigMap.get(ExcelConfigEnum.SHEET_NAME).toString());
+        xssfSheet.setDefaultColumnWidth(20);
+        List<String> titleList = doGenerateExcelTitleList();
+        List<List<Object>> expensesInfosList = doGenerateExcelExpensesInfoList(resultModelResult);
+        ExcelUtil.fillContent(xssfSheet, titleList, expensesInfosList);
+        filename = URLEncoder.encode(filename, "UTF-8");
+        httpServletResponse.setContentType(excelConfigMap.get(ExcelConfigEnum.CONTENT_TYPE).toString());
+        httpServletResponse.setHeader("Content-disposition", "attachment; filename=" + filename);
+        OutputStream bos = httpServletResponse.getOutputStream();
+        xssfWorkbook.write(bos);
+        httpServletResponse.flushBuffer();
+        bos.flush();
+        bos.close();
+
+    }
+    private StringBuilder doGenerateActivityEnrollFilename(Long startTime, Long endTime, StringBuilder title) {
+        String startTimeFormat = DateUtil.dateMillis2String(startTime, "yyyy年MM月dd日");
+        String endTimeFormat = DateUtil.dateMillis2String(endTime, "yyyy年MM月dd日");
+        return new StringBuilder(startTimeFormat).append("至").append(endTimeFormat).append(title).append("表单数据.xlsx");
+    }
+
+    /**
+     * 构造excel标题信息
+     */
+    private List<String> doGenerateExcelTitleList() {
+        List<String> titleList = new ArrayList<>();
+        titleList.add("花费时间");
+        titleList.add("收入");
+        titleList.add("支出");
+        titleList.add("结余");
+        return titleList;
+    }
+
+    /**
+     * 构造excel内容信息
+     */
+    List<List<Object>> doGenerateExcelExpensesInfoList(ExportExpensesInfoResult infoResult) throws Exception {
+        List<List<Object>> expensesInfosList = Lists.newArrayList();
+        List<ExportExpensesInfoResult.ExpensesInfo> expensesInfos = infoResult.getExpensesInfoList();
+        for (ExportExpensesInfoResult.ExpensesInfo expensesInfo : expensesInfos) {
+
+            List<Object> enrollInfos = Lists.newArrayList();
+
+            enrollInfos.add(expensesInfo.getDate());
+            enrollInfos.add(String.format("%.2f",expensesInfo.getInExpenses()));
+            enrollInfos.add(String.format("%.2f",expensesInfo.getOutExpenses()));
+            enrollInfos.add(String.format("%.2f",expensesInfo.getSurplus()));
+            expensesInfosList.add(enrollInfos);
+        }
+        List<Object> enrollInfos = Lists.newArrayList();
+        enrollInfos.add("总计");
+        enrollInfos.add(String.format("%.2f",infoResult.getTotalInExpenses()));
+        enrollInfos.add(String.format("%.2f",infoResult.getTotalOutExpenses()));
+        enrollInfos.add(String.format("%.2f",infoResult.getTotalSurplus()));
+        expensesInfosList.add(enrollInfos);
+        return expensesInfosList;
+    }
 }

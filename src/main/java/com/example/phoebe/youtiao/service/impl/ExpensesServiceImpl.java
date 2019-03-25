@@ -1,7 +1,6 @@
 package com.example.phoebe.youtiao.service.impl;
 
 import com.example.phoebe.youtiao.api.ExpensesService;
-import com.example.phoebe.youtiao.api.dto.ExpensesGroupClassificationDto;
 import com.example.phoebe.youtiao.api.dto.SumInAndOutExpensesDto;
 import com.example.phoebe.youtiao.api.result.*;
 import com.example.phoebe.youtiao.api.vo.SumInAndOutExpensesVo;
@@ -22,14 +21,11 @@ import com.example.phoebe.youtiao.dao.entity.ExpensesEntity;
 import com.example.phoebe.youtiao.service.manager.ExpensesManager;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.joda.time.DateTime;
-
-import javax.jws.WebParam;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -268,4 +264,65 @@ public class ExpensesServiceImpl implements ExpensesService {
         result.setSurplus(((!hasInExpenses)&&(!hasOutExpenses))?Lists.newArrayList():surplusList);
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
+
+    @Override
+    public ExportExpensesInfoResult exportExpensesInfoToExcel(ExportExcelVo vo) {
+        BeginAndEndDateResult dateResult = null;
+        ExportExpensesInfoResult result = new ExportExpensesInfoResult();
+        List<ExportExpensesInfoResult.ExpensesInfo> expensesInfoList = Lists.newArrayList();
+        float totalInExpenses = 0;
+        float totalOutExpenses = 0;
+        if(vo.getInterval().equals(DateIntervalEnum.YEAR.getInterval())){
+            dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.YEAR.getType());
+            Date beginDate = dateResult.getBeginDate();
+            Date tmpEndDate = null;
+            Calendar tmpEndcal = DateUtil.getTimesThisYearByInteval(beginDate);
+            for(int i = 1; i <= 12; i++){
+                if(i != 12) {
+                    tmpEndcal.set(Calendar.MONTH, i);
+                    tmpEndDate = tmpEndcal.getTime();
+                }else{
+                    tmpEndDate = dateResult.getEndDate();
+                }
+                SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
+                totalInExpenses += dto.getTotalInExpenses();
+                totalOutExpenses += dto.getTotalOutExpenses();
+                ExportExpensesInfoResult.ExpensesInfo expensesInfo = new ExportExpensesInfoResult.ExpensesInfo(dto.getTotalInExpenses(), dto.getTotalOutExpenses(), beginDate);
+                expensesInfoList.add(expensesInfo);
+                beginDate = tmpEndDate;
+            }
+        }
+        if(vo.getInterval().equals(DateIntervalEnum.MONTH.getInterval())){
+            dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.MONTH.getType());
+            Date beginDate = dateResult.getBeginDate();
+            Date endDate = dateResult.getEndDate();
+            while(beginDate.getTime() < endDate.getTime()){
+                Date tmpEndDate = DateUtil.getEndDate(beginDate, 1);
+                SumInAndOutExpensesDto dto = expensesManager.sumInAndOutExpenses(vo.getAccountBookId(), beginDate, tmpEndDate, null);
+                totalInExpenses += dto.getTotalInExpenses();
+                totalOutExpenses += dto.getTotalOutExpenses();
+                ExportExpensesInfoResult.ExpensesInfo expensesInfo = new ExportExpensesInfoResult.ExpensesInfo(dto.getTotalInExpenses(), dto.getTotalOutExpenses(), beginDate);
+                expensesInfoList.add(expensesInfo);
+                beginDate = tmpEndDate;
+            }
+        }
+
+
+        result.setBeginTime(dateResult.getBeginDate());
+        result.setEndTime(dateResult.getEndDate());
+        result.setAccountBookName(accountBookDao.queryNameById(vo.getAccountBookId()));
+        result.setTotalOutExpenses(totalOutExpenses);
+        result.setTotalInExpenses(totalInExpenses);
+
+        BigDecimal totalInDecimal = new BigDecimal(
+                Float.toString(totalInExpenses));
+
+        BigDecimal totalOutDecimal = new BigDecimal(
+                Float.toString(totalOutExpenses));
+
+        result.setTotalSurplus(totalInDecimal.subtract(totalOutDecimal).floatValue());
+        result.setExpensesInfoList(expensesInfoList);
+        return  result;
+    }
+
 }

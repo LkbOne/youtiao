@@ -90,6 +90,11 @@
         FROM account_book
         WHERE aid = #{aid} order by create_time
     </select>
+    <select id="queryNameById" parameterType="map" resultType="String">
+        SELECT name
+        FROM account_book
+        WHERE id = #{id}
+    </select>
 
 
     <delete id="deleteAccountBookById" parameterType="map">
