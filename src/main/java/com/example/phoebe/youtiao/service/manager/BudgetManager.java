@@ -31,7 +31,7 @@ public class BudgetManager {
         if(null == totalBudget || null == budget){
             return SHErrorCode.SYSTEM_ERROR;
         }
-        if (budget.getBeginTime().getTime() > totalBudget.getEndTime().getTime() || budget.getEndTime().getTime() < totalBudget.getBeginTime().getTime()) {
+        if (budget.getBeginTime().getTime() < totalBudget.getBeginTime().getTime() || budget.getEndTime().getTime() > totalBudget.getEndTime().getTime()) {
              return SHErrorCode.NO_IN_TOTAL_BUDGET_TIME;
         }
 
@@ -42,8 +42,8 @@ public class BudgetManager {
             return SHErrorCode.MORE_THAN_TOTAL_BUDGET;
         }
 
-        List<ListIntervalOfBudgetDto> timeIntervalList= budgetDao.listTimeByTotalBudgetIdAndClassification(totalBudget.getId(), budget.getClassification(), budget.getId());
-        if(CollectionUtils.isNotEmpty(timeIntervalList)){
+        List<ListIntervalOfBudgetDto> timeIntervalList = budgetDao.listTimeByTotalBudgetIdAndClassification(totalBudget.getId(), budget.getClassification(), budget.getId());
+        if(CollectionUtils.isEmpty(timeIntervalList)){
             return SHErrorCode.SUCCESS;
         }
 
@@ -51,7 +51,7 @@ public class BudgetManager {
         Long leftMargin = totalBudget.getBeginTime().getTime();
         Long rightMargin = null;
         ListIntervalOfBudgetDto timeInterval = null;
-        for(int i = 0; i<= timeIntervalList.size(); i++){
+        for(int i = 0; i <= timeIntervalList.size(); i++){
             if(i != timeIntervalList.size()) {
                 timeInterval = timeIntervalList.get(i);
                 rightMargin = timeInterval.getBeginTime().getTime();
@@ -66,7 +66,7 @@ public class BudgetManager {
                 leftMargin = timeInterval.getEndTime().getTime();
             }
         }
-        if(flag){
+        if(!flag){
             return SHErrorCode.HAS_MIXED_THIS_CLASSIFICATION_BUDGET_TIME_INTERVAL;
         }
 
@@ -85,13 +85,13 @@ public class BudgetManager {
         }
 
         Date beginTime = budgetDao.queryEarliestBeginTimeByTotalBudgetId(totalBudget.getId(), 1);
-        if(beginTime.getTime() < totalBudget.getBeginTime().getTime()){
+        if(beginTime != null && beginTime.getTime() < totalBudget.getBeginTime().getTime()){
             log.warn("BudgetManager.judgeTotalBudget beginTime:{}, totalBudget:{}", beginTime.getTime(), totalBudget);
             return SHErrorCode.LESS_THAN_TOTAL_BUDGET_TIME;
         }
 
         Date endTime = budgetDao.queryLatestEndTimeByTotalBudgetId(totalBudget.getId(), 1);
-        if(endTime.getTime() > totalBudget.getEndTime().getTime()){
+        if(endTime != null && endTime.getTime() > totalBudget.getEndTime().getTime()){
             log.warn("BudgetManager.judgeTotalBudget endTime:{}, totalBudget:{}", endTime, totalBudget);
             return SHErrorCode.MORE_THAN_TOTAL_BUDGET_TIME;
         }

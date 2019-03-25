@@ -23,4 +23,6 @@ public class UpdateBudgetVo extends BaseArg {
 
     @ApiModelProperty(name = "warnMoney", notes = "提醒金额")
     Float warnMoney;
+
+    Integer classification;
 }

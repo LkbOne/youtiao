@@ -19,8 +19,10 @@ import com.example.phoebe.youtiao.service.manager.BudgetManager;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,7 +61,6 @@ public class BudgetServiceImpl implements BudgetService {
             totalBudget.setEndTime(vo.getEndTime());
             totalBudget.setTotalBudget(vo.getBudget());
             totalBudget.setWarnMoney(vo.getWarnMoney());
-            totalBudget.setId(UUIDUtil.getUUID());
         }
 
         BudgetEntity budgetEntity = BeanUtil.copy(vo, BudgetEntity.class);
@@ -70,18 +71,29 @@ public class BudgetServiceImpl implements BudgetService {
                     "totalBudget.getBeginTime():{},  totalBudget.getEndTime():{}", budgetEntity.getBeginTime(), budgetEntity.getEndTime(), totalBudget.getBeginTime(), totalBudget.getEndTime());
             return new ModelResult(judgeEnum);
         }
-
-        budgetEntity.setId(UUIDUtil.getUUID());
-        budgetEntity.setTotalBudgetId(totalBudget.getId());
-        budgetDao.sumBudgetByTotalBudgetId(totalBudget.getId());
-
-        totalBudgetDao.addTotalBudget(totalBudget);
-        if (budgetDao.addBudget(budgetEntity) != 1) {
-            log.warn("BudgetServiceImpl.addBudget fail");
+        if(!doAddBudget(totalBudget, budgetEntity)){
+            log.warn("BudgetServiceImpl.addBudget totalBudget:{}, budgetEntity:{}", totalBudget, budgetEntity);
             return new ModelResult(SHErrorCode.ADD_FAIL);
         }
         return new ModelResult(SHErrorCode.SUCCESS);
     }
+    @Transactional
+    public boolean doAddBudget(TotalBudgetEntity totalBudget, BudgetEntity budget){
+        try {
+            if (StringUtils.isEmpty(totalBudget.getId())) {
+                totalBudget.setId(UUIDUtil.getUUID());
+                totalBudgetDao.addTotalBudget(totalBudget);
+            }
+            budget.setId(UUIDUtil.getUUID());
+            budget.setTotalBudgetId(totalBudget.getId());
+            budgetDao.addBudget(budget);
+        }catch (RuntimeException e){
+            log.warn("BudgetServiceImpl.doAddBudget");
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public ModelResult updateBudget(UpdateBudgetVo vo) {
@@ -97,6 +109,8 @@ public class BudgetServiceImpl implements BudgetService {
         budgetEntity.setBudget(vo.getBudget() - budgetEntity.getBudget());
         budgetEntity.setBeginTime(vo.getBeginTime());
         budgetEntity.setEndTime(vo.getEndTime());
+        budgetEntity.setWarnMoney(vo.getWarnMoney());
+        budgetEntity.setClassification(vo.getClassification());
 
         TotalBudgetEntity totalBudget = totalBudgetDao.queryTotalBudgetById(budgetEntity.getTotalBudgetId());
         SHErrorCode judgeEnum = budgetManager.judgeBudget(totalBudget, budgetEntity);
