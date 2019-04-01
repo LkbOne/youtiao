@@ -7,7 +7,8 @@ import java.io.Serializable;
 
 @Data
 public class QueryCustomDataByIdResult implements Serializable {
-
+    @ApiModelProperty(name = "id", notes = "用户id")
+    String id;
     @ApiModelProperty(name = "name", notes = "账号名")
     String name;
     @ApiModelProperty(name = "realName", notes = "真实名字")

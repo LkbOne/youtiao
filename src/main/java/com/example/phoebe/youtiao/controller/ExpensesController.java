@@ -159,8 +159,14 @@ public class ExpensesController {
 
     @TokenCheckTrigger
     @ApiOperation(value = "导出excel， 月或这年报表")
-    @RequestMapping(value = "exportExcel", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    void exportExcel(@RequestBody ExportExcelArg arg, HttpServletResponse httpServletResponse) throws Exception {
+    @RequestMapping(value = "exportExcel", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    void exportExcel(@RequestParam("accountBookId") String accountBookId, @RequestParam("interval") String interval, @RequestParam("date") String date, HttpServletResponse httpServletResponse) throws Exception {
+        ExportExcelArg arg = new ExportExcelArg();
+        arg.setAccountBookId(accountBookId);
+        arg.setDate(new Date(Long.valueOf(date)));
+//        arg.setDate(date);
+//        arg.setInterval(Integer.valueOf(interval));
+        arg.setInterval(Integer.valueOf(interval));
         if(arg.isWrongParams()){
             log.warn("ExpensesController.exportExcel params error arg:{}", arg);
             return;
