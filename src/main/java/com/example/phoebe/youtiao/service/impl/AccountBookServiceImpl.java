@@ -88,9 +88,6 @@ public class AccountBookServiceImpl implements AccountBookService {
 
     @Override
     public ModelResult<PageResult<ListAccountBookResult>> listAccountBook(ListAccountBookVo vo) {
-        System.out.println("ListAccountBookVo:" + vo.toString());
-        System.out.println("size:" + vo.getPageSize());
-        System.out.println("number:" + vo.getPageNum());
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
         List<AccountBookEntity> accountBookLists = accountBookDao.listAccountBookByAccountId(vo.getAccountId(), page);
 

@@ -222,11 +222,11 @@ public class ExpensesServiceImpl implements ExpensesService {
            dateResult = DateUtil.getBeginAndEndDate(vo.getDate(), SumExpensesDateEnum.YEAR.getType());
            Date beginDate = dateResult.getBeginDate();
            Date tmpEndDate = null;
-           Calendar tmpEndcal = DateUtil.getTimesThisYearByInteval(beginDate);
+           Calendar tmpEndCal = DateUtil.getTimesThisYearByInteval(beginDate);
             for(int i = 1; i <= 12; i++){
                 if(i != 12) {
-                    tmpEndcal.set(Calendar.MONTH, i);
-                    tmpEndDate = tmpEndcal.getTime();
+                    tmpEndCal.set(Calendar.MONTH, i);
+                    tmpEndDate = tmpEndCal.getTime();
                 }else{
                     tmpEndDate = dateResult.getEndDate();
                 }

@@ -19,6 +19,10 @@ public enum SHErrorCode {
 	NO_AUTH(-11, "暂未在灰度范围内,敬请期待"),
 	JSON_DESERIALIZATION_FAIL(-12, "JSON反序列化失败"),
 	THIRD_APPLICATION_ERROR(-13, "请求第三方响应异常"),
+	ADD_FAIL(-14, "添加失败"),
+	UPDATE_FAIL(-15, "更新失败"),
+	DEL_FAIL(-16, "删除失败"),
+	USER_ACCOUNT_NOT_EXIST(-17, "用户不存在"),
 
 	// 預算
 

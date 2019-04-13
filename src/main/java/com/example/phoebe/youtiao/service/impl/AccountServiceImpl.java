@@ -53,9 +53,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ModelResult<LoginResult> login(LoginVo vo) {
-        System.out.println("loginVo:" + vo);
         AccountManager.WxAuth wxAuth = accountManager.getWxSession(vo.getCode());
-        if(wxAuth == null || wxAuth.getOpenid() == null ){
+        if(wxAuth == null || wxAuth.getOpenid() == null){
             log.warn("AccountServiceImpl.login get openid by code fail code:{} ", vo.getCode());
             return new ModelResult<>(SHErrorCode.WX_USER_NOFOUND);
         }

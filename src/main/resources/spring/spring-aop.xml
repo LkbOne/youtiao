@@ -9,8 +9,8 @@
     <!-- 日志拦截器 -->
     <bean id="logInterceptor" class="com.example.phoebe.youtiao.interceptor.LogInterceptor"/>
     <aop:config>
-        <aop:pointcut id="userMethods" expression="execution(* com.example.phoebe.youtiao.controller.*.*(..))"/>
-        <aop:pointcut id="logMethods" expression="execution(* com.example.phoebe.youtiao.controller.*.*(..))"/>
+        <aop:pointcut id="userMethods" expression="execution(* com.example.phoebe.youtiao.controller.*.*(..)) and !execution(* com.example.phoebe.youtiao.controller.WebSocketServer.*(..))"/>
+        <aop:pointcut id="logMethods" expression="execution(* com.example.phoebe.youtiao.controller.*.*(..)) and !execution(* com.example.phoebe.youtiao.controller.WebSocketServer.*(..))"/>
         <aop:advisor order="1" pointcut-ref="userMethods" advice-ref="userInterceptor"/>
         <aop:advisor order="2" pointcut-ref="logMethods" advice-ref="logInterceptor"/>
     </aop:config>

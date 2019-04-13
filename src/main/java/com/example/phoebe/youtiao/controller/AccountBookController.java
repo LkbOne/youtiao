@@ -28,10 +28,6 @@ public class AccountBookController {
     @Autowired
     RedisManager redisManager;
 
-    @RequestMapping(value = "hello", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public ModelResult addAccountBook(@RequestHeader String token){
-        return new ModelResult(SHErrorCode.SUCCESS);
-    }
 
     @TokenCheckTrigger
     @ApiOperation(value = "添加账本")

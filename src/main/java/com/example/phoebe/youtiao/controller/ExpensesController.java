@@ -177,7 +177,7 @@ public class ExpensesController {
         Long startTime = resultModelResult.getBeginTime().getTime();
         Long endTime = resultModelResult.getEndTime().getTime();
         StringBuilder title = new StringBuilder(resultModelResult.getAccountBookName());
-        String filename = doGenerateActivityEnrollFilename(startTime, endTime, title).toString();
+        String filename = doGenerateExpensesEnrollFilename(startTime, endTime, title).toString();
         Map<ExcelConfigEnum, Object> excelConfigMap = new LinkedHashMap<>();
         excelConfigMap.put(ExcelConfigEnum.FILE_NAME, filename);
         excelConfigMap.put(ExcelConfigEnum.SHEET_NAME, "enrollSheet");
@@ -198,7 +198,7 @@ public class ExpensesController {
         bos.close();
 
     }
-    private StringBuilder doGenerateActivityEnrollFilename(Long startTime, Long endTime, StringBuilder title) {
+    private StringBuilder doGenerateExpensesEnrollFilename(Long startTime, Long endTime, StringBuilder title) {
         String startTimeFormat = DateUtil.dateMillis2String(startTime, "yyyy年MM月dd日");
         String endTimeFormat = DateUtil.dateMillis2String(endTime, "yyyy年MM月dd日");
         return new StringBuilder(startTimeFormat).append("至").append(endTimeFormat).append(title).append("表单数据.xlsx");
