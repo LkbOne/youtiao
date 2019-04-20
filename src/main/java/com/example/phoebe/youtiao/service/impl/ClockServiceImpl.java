@@ -7,6 +7,7 @@ import com.example.phoebe.youtiao.api.vo.clock.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
+import com.example.phoebe.youtiao.commmon.util.DateUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
 import com.example.phoebe.youtiao.controller.WebSocketServer;
 import com.example.phoebe.youtiao.dao.api.AccountDao;
@@ -120,11 +121,12 @@ public class ClockServiceImpl implements ClockService {
                         // 还有月份没有实现
                         continue;
                     }
-                    clock.setTime(new Date(time));
-                    clockDao.updateClock(clock);
-                    if(!WebSocketServer.sendInfo(clock.getId(), clock.getAid())){
-//                        AccountEntity accountEntity = accountDao.queryAccountById(clock.getAid());
-//                        smsManager.sendSMS(accountEntity.getPhone(),"123456", 3);
+
+                    if(WebSocketServer.sendInfo(clock.getId(), clock.getAid())){
+                        AccountEntity accountEntity = accountDao.queryAccountById(clock.getAid());
+                        smsManager.sendSMS(accountEntity.getPhone(), DateUtil.minuteformat(clock.getTime()), clock.getName());
+                        clock.setTime(new Date(time));
+                        clockDao.updateClock(clock);
                     }
                 }
             }

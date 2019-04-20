@@ -25,7 +25,7 @@ public class DateUtil {
 
     private static final Long ONE_DAY_MILLIS = Long.valueOf(1000 * 60 * 60 * 24);
 
-    private static final DateTimeFormatter DEFAULT_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DEFAULT_DATE_FORMAT_MINUTE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static String dateMillis2String(long dateMillis, String pattern) {
         StringBuilder sb = new StringBuilder();
@@ -170,9 +170,9 @@ public class DateUtil {
         return DEFAULT_DATE_FORMAT.format(ldt);
     }
 
-    public static String format2(Date date) {
+    public static String minuteformat(Date date) {
         LocalDateTime ldt = dateConvertLocalDateTime(date);
-        return DEFAULT_DATE_FORMAT_2.format(ldt);
+        return DEFAULT_DATE_FORMAT_MINUTE.format(ldt);
     }
     public static String formatNoHour(Date date) {
         LocalDateTime ldt = dateConvertLocalDateTime(date);
