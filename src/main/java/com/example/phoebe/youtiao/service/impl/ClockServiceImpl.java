@@ -9,8 +9,11 @@ import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
 import com.example.phoebe.youtiao.controller.WebSocketServer;
+import com.example.phoebe.youtiao.dao.api.AccountDao;
 import com.example.phoebe.youtiao.dao.api.ClockDao;
+import com.example.phoebe.youtiao.dao.entity.AccountEntity;
 import com.example.phoebe.youtiao.dao.entity.ClockEntity;
+import com.example.phoebe.youtiao.service.manager.SMSManager;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,6 +32,11 @@ public class ClockServiceImpl implements ClockService {
     @Autowired
     ClockDao clockDao;
 
+    @Autowired
+    SMSManager smsManager;
+
+    @Autowired
+    AccountDao accountDao;
     @Override
     public ModelResult addClock(AddClockVo vo) {
         ClockEntity addEntity = BeanUtil.copy(vo, ClockEntity.class);
@@ -114,7 +122,10 @@ public class ClockServiceImpl implements ClockService {
                     }
                     clock.setTime(new Date(time));
                     clockDao.updateClock(clock);
-                    WebSocketServer.sendInfo(clock.getId(), clock.getAid());
+                    if(!WebSocketServer.sendInfo(clock.getId(), clock.getAid())){
+//                        AccountEntity accountEntity = accountDao.queryAccountById(clock.getAid());
+//                        smsManager.sendSMS(accountEntity.getPhone(),"123456", 3);
+                    }
                 }
             }
         } catch (IOException e) {

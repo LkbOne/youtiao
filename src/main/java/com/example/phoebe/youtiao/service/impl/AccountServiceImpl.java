@@ -132,6 +132,10 @@ public class AccountServiceImpl implements AccountService {
         return token;
     }
 
+    public ModelResult registerAccount(){
+
+    }
+
     @Override
     public ModelResult UpdateCustomData(UpdateCustomDataVo vo){
         AccountEntity entity = accountDao.queryAccountById(vo.getAccountId());

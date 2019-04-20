@@ -89,21 +89,24 @@ public class WebSocketServer {
     /**
      * 群发自定义消息
      * */
-    public static void sendInfo(String message, String uid) throws IOException {
+    public static boolean sendInfo(String message, String uid) throws IOException {
         log.info("推送消息到窗口"+uid+"，推送内容:"+message);
+        boolean flag = false;
         for (WebSocketServer item : webSocketSet) {
             try {
 //这里可以设定只推送给这个uid的，为null则全部推送
                 if(uid==null) {
                     item.sendMessage(message);
+                    flag = true;
                 }else if(item.uid.equals(uid)){
-                    System.out.println("asdasdasdasdas");
                     item.sendMessage(message);
+                    flag = true;
                 }
             } catch (IOException e) {
                 continue;
             }
         }
+        return flag;
     }
 
     public static synchronized int getOnlineCount() {
