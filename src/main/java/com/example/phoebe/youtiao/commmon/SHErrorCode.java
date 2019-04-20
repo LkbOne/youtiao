@@ -23,6 +23,7 @@ public enum SHErrorCode {
 	UPDATE_FAIL(-15, "更新失败"),
 	DEL_FAIL(-16, "删除失败"),
 	USER_ACCOUNT_NOT_EXIST(-17, "用户不存在"),
+	USER_ACCOUNT_EXISTED(-17, "用户已经存在"),
 
 	// 預算
 
@@ -45,6 +46,8 @@ public enum SHErrorCode {
 	LOGIN_NEED_RELOGIN(2001, "需要重新登录"),
 	CHECK_LOGIN_PHONE_MESSAGE_FAILED(2002, "验证码错误"),
 	LOGIN_BLACK_LIST(2003, "本账号已被禁用"),
+	REGISTER_NEED_AGAIN(2004, "需要重新注册"),
+	LOGIN_FAIL(2005, "登录失败")
 
 	;
 
