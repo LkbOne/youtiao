@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.phoebe.youtiao.dao.api.ClockDao">
+    <resultMap id="BaseResultMap" type="clockEntity">
+        <id column="id" property="id"/>
+        <result column="aid" property="aid"/>
+        <result column="status" property="status"/>
+        <result column="cycle" property="cycle"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="time" property="time"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+
+    </resultMap>
+
+    <insert id="addClock" parameterType="clockEntity">
+        INSERT INTO clock(
+        `id`,
+        `aid`,
+        `status`,
+        `cycle`,
+        `name`,
+        `description`,
+        `time`,
+        `create_time`,
+        `last_modify_time`
+        )
+        VALUES (
+        #{id},
+        #{aid},
+        #{status},
+        #{cycle},
+        #{name},
+        #{description},
+        #{time},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateClock" parameterType="clockEntity">
+        UPDATE clock
+        <set>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="cycle != null">
+                `cycle` = #{cycle},
+            </if>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="description != null">
+                `description` = #{description},
+            </if>
+            <if test="time != null">
+                `time` = #{time},
+            </if>
+            `last_modify_time` = now()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="listClock" parameterType="map" resultMap="BaseResultMap">
+        SELECT *
+        FROM clock
+        WHERE aid = #{uid}
+    </select>
+
+    <delete id="deleteClockById" parameterType="map">
+        DELETE FROM clock WHERE id=#{id}
+    </delete>
+
+    <select id="getClockById" parameterType="map"  resultMap="BaseResultMap">
+        Select * FROM clock WHERE id=#{id}
+    </select>
+
+    <select id="listClockByStatus" parameterType="map"  resultMap="BaseResultMap">
+        Select * FROM clock WHERE status = #{status}
+    </select>
+
+</mapper>

@@ -5,13 +5,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class ListBudgetByAccountIdResult implements Serializable {
+public class ListBudgetByAccountBookIdResult implements Serializable {
     String id;
     Float budget;
-    Integer status;
-    Integer type;
     Long beginTime;
     Long endTime;
     Long createTime;
     Long lastModifyTime;
+    Float warnMoney;
+    Integer classification;
+    Float spentMoney;
 }

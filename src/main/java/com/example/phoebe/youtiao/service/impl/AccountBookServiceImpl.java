@@ -9,7 +9,10 @@ import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.dao.api.AccountBookDao;
+import com.example.phoebe.youtiao.dao.api.ExpensesDao;
+import com.example.phoebe.youtiao.dao.api.TotalBudgetDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
+import com.example.phoebe.youtiao.dao.entity.TotalBudgetEntity;
 import com.example.phoebe.youtiao.service.manager.AccountBookManager;
 import com.github.pagehelper.Page;
 import java.util.List;
@@ -26,6 +29,11 @@ public class AccountBookServiceImpl implements AccountBookService {
     @Autowired
     AccountBookManager accountBookManager;
 
+    @Autowired
+    TotalBudgetDao totalBudgetDao;
+
+    @Autowired
+    ExpensesDao expensesDao;
     @Override
     public ModelResult addAccountBook(AddAccountBookVo vo) {
         AccountBookEntity accountBookEntity = BeanUtil.copy(vo, AccountBookEntity.class);
@@ -71,16 +79,20 @@ public class AccountBookServiceImpl implements AccountBookService {
             return new ModelResult<>(SHErrorCode.NO_DATA);
         }
         GetAccountBookByIdResult result = BeanUtil.copy(accountBookEntity, GetAccountBookByIdResult.class);
-        result.setCreateTime(accountBookEntity.getCreateTime().getTime());
-        result.setLastModifyTime(accountBookEntity.getLastModifyTime().getTime());
+        TotalBudgetEntity totalBudget = totalBudgetDao.queryTotalBudgetByAccountBookId(vo.getId());
+        if(totalBudget != null) {
+            result.setTotalBudgetId(totalBudget.getId());
+            Float totalOutExpenses = expensesDao.sumExpenses(accountBookEntity.getId(),
+                    1, null, totalBudget.getBeginTime(),
+                    totalBudget.getEndTime());
+            result.setWarnMoney(totalBudget.getWarnMoney());
+            result.setLeftBudgetMoney(totalBudget.getTotalBudget() - (totalOutExpenses == null ? 0 : totalOutExpenses));
+        }
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
 
     @Override
     public ModelResult<PageResult<ListAccountBookResult>> listAccountBook(ListAccountBookVo vo) {
-        System.out.println("ListAccountBookVo:" + vo.toString());
-        System.out.println("size:" + vo.getPageSize());
-        System.out.println("number:" + vo.getPageNum());
         Page page = new Page(vo.getPageNum(), vo.getPageSize(), true);
         List<AccountBookEntity> accountBookLists = accountBookDao.listAccountBookByAccountId(vo.getAccountId(), page);
 

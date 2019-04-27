@@ -22,14 +22,8 @@ public class AccountBookController {
     @Autowired
     AccountBookService accountBookService;
 
-
     @Autowired
     RedisManager redisManager;
-
-    @RequestMapping(value = "hello", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public ModelResult addAccountBook(@RequestHeader String token){
-        return new ModelResult(SHErrorCode.SUCCESS);
-    }
 
     @TokenCheckTrigger
 //    @ApiOperation(value = "添加账本")
@@ -74,7 +68,7 @@ public class AccountBookController {
     public ModelResult<GetAccountBookByIdResult> getAccountBookById(@RequestHeader String token, @RequestBody GetAccountBookByIdArg arg){
         if(arg.isWrongParams()){
             log.warn("");
-            return new ModelResult(SHErrorCode.PARAMS_ERROR);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
         }
         GetAccountBookByIdVo vo = BeanUtil.copy(arg, GetAccountBookByIdVo.class);
         return accountBookService.getAccountBookById(vo);

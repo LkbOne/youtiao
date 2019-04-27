@@ -9,10 +9,10 @@ import java.util.Date;
 public class QueryBudgetByIdResult implements Serializable {
     String id;
     Float budget;
-    Integer status;
-    Integer type;
     Long beginTime;
     Long endTime;
     Long createTime;
     Long lastModifyTime;
+    Integer classification;
+    Float warmMoney;
 }

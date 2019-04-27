@@ -5,12 +5,13 @@
         <id column="id" property="id"/>
         <result column="account_book_id" property="accountBookId"/>
         <result column="budget" property="budget"/>
-        <result column="status" property="status"/>
-        <result column="type" property="type"/>
         <result column="begin_time" property="beginTime"/>
         <result column="end_time" property="endTime"/>
         <result column="create_time" property="createTime"/>
         <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="classification" property="classification"/>
+        <result column="warn_money" property="warnMoney"/>
+        <result column="total_budget_id" property="totalBudgetId"/>
     </resultMap>
 
     <insert id="addBudget" parameterType="budgetEntity">
@@ -18,23 +19,25 @@
         `id`,
         `account_book_id`,
         `budget`,
-        `status`,
-        `type`,
         `begin_time`,
         `end_time`,
         `create_time`,
-        `last_modify_time`
+        `last_modify_time`,
+        `classification`,
+        `warn_money`,
+        `total_budget_id`
         )
         VALUES (
         #{id},
         #{accountBookId},
         #{budget},
-        #{status},
-        #{type},
         #{beginTime},
         #{endTime},
         now(),
-        now()
+        now(),
+        #{classification},
+        #{warnMoney},
+        #{totalBudgetId}
         )
     </insert>
 
@@ -44,19 +47,18 @@
             <if test="budget != null">
                 `budget` = #{budget},
             </if>
-            <if test="status != null">
-                `status` = #{status},
-            </if>
-            <if test="type != null">
-                `type` = #{type},
-            </if>
             <if test="beginTime != null">
                 `begin_time` = #{beginTime},
             </if>
             <if test="endTime != null">
                 `end_time` = #{endTime},
             </if>
-
+            <if test="classification != null">
+                `classification` = #{classification},
+            </if>
+            <if test="warnMoney != null">
+                `warn_money` = #{warnMoney},
+            </if>
             `last_modify_time` = now()
         </set>
         WHERE `id` = #{id}
@@ -77,5 +79,46 @@
     <delete id="deleteBudgetById" parameterType="map">
         DELETE FROM budget WHERE id=#{id}
     </delete>
+
+    <delete id="deleteBudgetByTotalBudgetId" parameterType="map">
+        DELETE FROM budget WHERE total_budget_id=#{totalBudgetId}
+    </delete>
+
+    <select id="countBudgetByTotalBudgetId" parameterType="map" resultType="int">
+        SELECT count(1)
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+    </select>
+
+    <select id="sumBudgetByTotalBudgetId" parameterType="map" resultType="Float">
+        SELECT sum(budget)
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+    </select>
+    <select id="listTimeByTotalBudgetIdAndClassification" parameterType="map" resultType="com.example.phoebe.youtiao.api.dto.ListIntervalOfBudgetDto">
+        SELECT id, begin_time as beginTime, end_time as endTime
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        AND
+        classification = #{classification}
+        <if test="id != null">
+         AND `id` != #{id}
+        </if>
+        order by begin_time
+    </select>
+    <select id="queryEarliestBeginTimeByTotalBudgetId" parameterType="map" resultType="java.util.Date">
+        SELECT begin_time
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        order by begin_time
+        limit #{limit}
+    </select>
+    <select id="queryLatestEndTimeByTotalBudgetId" parameterType="map" resultType="java.util.Date">
+        SELECT end_time
+        FROM budget
+        WHERE total_budget_id = #{totalBudgetId}
+        ORDER BY end_time DESC
+        limit #{limit}
+    </select>
 
 </mapper>

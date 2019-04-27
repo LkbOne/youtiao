@@ -60,14 +60,14 @@ public class TokenManager {
 //                    }
 //
 //                    if (blackOpenId.equals(tokenEntity.getOpenid())) {
-//                        log.info("login be refused, openid={}", tokenEntity.getOpenid());
+//                        log.info("authorize be refused, openid={}", tokenEntity.getOpenid());
 //                        return new ModelResult<>(SHErrorCode.LOGIN_BLACK_LIST);
 //                    }
 //                }
 //            }
 
         } else {
-            log.info("token expired need login again token:{}", token);
+            log.info("token expired need authorize again token:{}", token);
             return new ModelResult<>(SHErrorCode.LOGIN_TOKEN_INVALID);
         }
 

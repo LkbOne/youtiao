@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="accountEntity">
         <id column="id" property="id"/>
         <result column="account" property="account"/>
+        <result column="password" property="password"/>
         <result column="status" property="status"/>
         <result column="open_history" property="openHistory"/>
         <result column="create_time" property="createTime"/>
@@ -12,6 +13,7 @@
         <result column="real_name" property="realName"/>
         <result column="phone" property="phone"/>
         <result column="signature" property="signature"/>
+        <result column="avatar_fpath" property="avatarFPath"/>
 
     </resultMap>
 
@@ -19,18 +21,30 @@
         INSERT INTO account(
         `id`,
         `account`,
+        `password`,
         `status`,
         `open_history`,
         `create_time`,
-        `last_modify_time`
+        `last_modify_time`,
+        `signature`,
+        `phone`,
+        `real_name`,
+        `name`,
+        `avatar_fpath`
         )
         VALUES (
         #{id},
         #{account},
+        #{password},
         #{status},
         #{openHistory},
         now(),
-        now()
+        now(),
+        #{signature},
+        #{phone},
+        #{realName},
+        #{name},
+        #{avatarFPath}
         )
     </insert>
 
@@ -39,6 +53,9 @@
         <set>
             <if test="account != null">
                 `account` = #{account},
+            </if>
+            <if test="password != null">
+            `password` = #{password},
             </if>
             <if test="status != null">
                 `status` = #{status},
@@ -58,6 +75,9 @@
             <if test="phone != null">
                 `phone` = #{phone},
             </if>
+            <if test="avatarFPath != null">
+                `avatar_fpath` = #{avatarFPath},
+            </if>
             `last_modify_time` = now()
         </set>
         WHERE `id` = #{id}
@@ -67,6 +87,11 @@
         SELECT *
         FROM account
         WHERE id = #{id}
+    </select>
+    <select id="queryAccountByAccountAndPassword" parameterType="map" resultType="Integer">
+        SELECT count(*)
+        FROM account
+        WHERE account = #{account} and password = #{password}
     </select>
 
     <delete id="deleteAccountById" parameterType="map">

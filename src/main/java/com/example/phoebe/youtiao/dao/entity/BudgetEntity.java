@@ -10,10 +10,12 @@ public class BudgetEntity implements Serializable {
     String id;
     String accountBookId;
     Float budget;
-    Integer status;
-    Integer type;
+    Integer classification;
+    Float warnMoney;
     Date beginTime;
     Date endTime;
     Date createTime;
     Date lastModifyTime;
+
+    String totalBudgetId;
 }

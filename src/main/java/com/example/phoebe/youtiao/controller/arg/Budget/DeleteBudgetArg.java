@@ -13,8 +13,8 @@ public class DeleteBudgetArg extends BaseArg {
 //    @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if(StringUtils.isEmpty(id)){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }
