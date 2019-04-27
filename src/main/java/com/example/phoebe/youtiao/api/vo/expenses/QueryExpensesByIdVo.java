@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class QueryExpensesByIdVo extends BaseArg {
-//    @ApiModelProperty(value = "id", notes = "费用id")
     String id;
 }

@@ -2,7 +2,7 @@ package com.example.phoebe.youtiao.budget;
 
 import com.example.phoebe.youtiao.api.BudgetService;
 import com.example.phoebe.youtiao.api.result.ListBudgetByAccountBookIdResult;
-import com.example.phoebe.youtiao.api.vo.budget.AddbudgetVo;
+import com.example.phoebe.youtiao.api.vo.budget.AddBudgetVo;
 import com.example.phoebe.youtiao.api.vo.budget.ListBudgetVo;
 import com.example.phoebe.youtiao.api.vo.budget.UpdateBudgetVo;
 import com.example.phoebe.youtiao.commmon.ModelResult;
@@ -25,7 +25,7 @@ public class BudgetTest {
 
     @Test
     public void addBudget(){
-        AddbudgetVo vo = new AddbudgetVo();
+        AddBudgetVo vo = new AddBudgetVo();
         vo.setBudget(new Float(123.03));
         vo.setWarnMoney(new Float(100));
         vo.setBeginTime(new Date());

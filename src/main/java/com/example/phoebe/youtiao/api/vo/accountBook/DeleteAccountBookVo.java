@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class DeleteAccountBookVo extends BaseArg {
 
-//    @ApiModelProperty(value = "id", notes = "账本id")
     String id;
 }

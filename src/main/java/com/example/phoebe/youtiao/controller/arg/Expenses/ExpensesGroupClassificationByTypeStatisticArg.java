@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 public class ExpensesGroupClassificationByTypeStatisticArg extends BaseArg {
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    // @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
-    @ApiModelProperty(name = "year", notes = "年份")
+    //  @ApiModelProperty(name = "year", notes = "年份")
     Integer year;
-    @ApiModelProperty(name = "month", notes = "月份", allowEmptyValue = true)
+    // @ApiModelProperty(name = "month", notes = "月份", allowEmptyValue = true)
     Integer month;
 
     @ApiModelProperty(hidden = true)

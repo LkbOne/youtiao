@@ -12,25 +12,25 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 @ApiModel
 public class AddBudgetArg extends BaseArg {
-    @ApiModelProperty(name = "accountBookId",notes = "账本id")
+//    @ApiModelProperty(name = "accountBookId",notes = "账本id")
     String accountBookId;
 
-    @ApiModelProperty(name = "budget", notes = "预算金额")
+    //     @ApiModelProperty(name = "budget", notes = "预算金额")
     Float budget;
 
-    @ApiModelProperty(name = "beginTime", notes = "开始时间")
+    //     @ApiModelProperty(name = "beginTime", notes = "开始时间")
     Date beginTime;
 
-    @ApiModelProperty(name = "endTime", notes = "结束时间")
+    //     @ApiModelProperty(name = "endTime", notes = "结束时间")
     Date endTime;
 
-    @ApiModelProperty(name = "warnMoney", notes = "提示金额")
+    //    @ApiModelProperty(name = "warnMoney", notes = "提示金额")
     Float warnMoney;
 
-    @ApiModelProperty(name = "classification", notes = "分类")
+    //  @ApiModelProperty(name = "classification", notes = "分类")
     Integer classification;
 
-    @ApiModelProperty(hidden = true)
+    //   @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if(StringUtils.isBlank(accountBookId)){
             return true;

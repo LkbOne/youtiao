@@ -30,7 +30,6 @@ public class PictureController {
     @Autowired
     PictureService pictureService;
 
-    @ApiOperation(value = "获取临时path")
     @RequestMapping(value = "getTPath", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<TPathResult> getTPath(@RequestParam("type") Integer type, @RequestParam("file") MultipartFile file) {
         GetTPathArg arg = new GetTPathArg();
@@ -43,7 +42,6 @@ public class PictureController {
         return pictureService.getTPath(arg);
     }
 
-    @ApiOperation(value = "获取永久path")
     @RequestMapping(value = "getFPath", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<FPathResult> getFPath(@RequestBody GetFPathArg arg) {
         if (arg.isWrongParams()) {
@@ -53,7 +51,6 @@ public class PictureController {
         return pictureService.getFPath(arg);
     }
 
-    @ApiOperation(value = "下载")
     @RequestMapping(value = "download", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public void downLoad(@RequestBody DownLoadArg arg, HttpServletResponse httpServletResponse) throws IOException {
         if (arg.isWrongParams()) {

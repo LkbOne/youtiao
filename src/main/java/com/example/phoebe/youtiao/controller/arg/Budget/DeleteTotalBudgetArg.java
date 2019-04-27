@@ -8,10 +8,10 @@ import java.io.Serializable;
 
 @Data
 public class DeleteTotalBudgetArg implements Serializable {
-    @ApiModelProperty(name = "id", notes = "总预算id")
+    // @ApiModelProperty(name = "id", notes = "总预算id")
     String id;
 
-    @ApiModelProperty(hidden = true)
+    //  @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if(StringUtils.isEmpty(id)){
             return true;

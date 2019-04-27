@@ -12,16 +12,16 @@ import java.util.Date;
 @Data
 public class AddExpensesArg extends BaseArg {
 
-    @ApiModelProperty(name = "budgetId", notes = "budgetId", allowEmptyValue = true)
+    //  @ApiModelProperty(name = "budgetId", notes = "budgetId", allowEmptyValue = true)
     String budgetId;
 
-    @ApiModelProperty(name = "accountBookId", notes = "accountBookId")
+    // @ApiModelProperty(name = "accountBookId", notes = "accountBookId")
     String accountBookId;
 
-    @ApiModelProperty(name = "expensesDate", notes = "消费日期")
+    // @ApiModelProperty(name = "expensesDate", notes = "消费日期")
     Date expenseDate;
 
-    @ApiModelProperty(name = "description", notes = "备注", allowEmptyValue = true)
+    //  @ApiModelProperty(name = "description", notes = "备注", allowEmptyValue = true)
     String description;
 
 

@@ -23,19 +23,17 @@ public class BudgetController  {
     BudgetService budgetService;
 
     @TokenCheckTrigger
-    @ApiOperation(value = "添加预算")
     @RequestMapping(value = "addBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult addBudget(@RequestHeader String token, @RequestBody AddBudgetArg arg){
         if(arg.isWrongParams()){
             log.warn("BudgetController.addBudget arg:{}", arg);
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
         }
-        AddbudgetVo vo = BeanUtil.copy(arg, AddbudgetVo.class);
+        AddBudgetVo vo = BeanUtil.copy(arg, AddBudgetVo.class);
         return budgetService.addBudget(vo);
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "更新预算")
     @RequestMapping(value = "updateBudget", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public ModelResult updateBudget(@RequestHeader String token, @RequestBody UpdateBudgetArg arg){
         if(arg.isWrongParams()){
@@ -47,7 +45,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "删除预算")
     @RequestMapping(value = "deleteBudgetById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public ModelResult deleteBudgetById(@RequestHeader String token, @RequestBody DeleteBudgetArg arg){
         if(arg.isWrongParams()){
@@ -60,7 +57,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "删除总预算")
     @RequestMapping(value = "deleteTotalBudgetById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public ModelResult deleteTotalBudgetById(@RequestHeader String token, @RequestBody DeleteTotalBudgetArg arg){
         if(arg.isWrongParams()){
@@ -73,7 +69,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "通过id获得预算详情")
     @RequestMapping(value = "queryBudgetById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<QueryBudgetByIdResult> queryBudgetById(@RequestHeader String token, @RequestBody QueryBudgetByIdArg arg){
         if(arg.isWrongParams()){
@@ -86,7 +81,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "展示所有的预算")
     @RequestMapping(value = "listBudgetByAccountBookId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<PageResult<ListBudgetByAccountBookIdResult>> listBudgetByAccountBookId(@RequestHeader String token, @RequestBody ListBudgetArg arg){
         if(arg.isWrongParams()){
@@ -98,7 +92,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "添加总预算")
     @RequestMapping(value = "addTotalBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult addTotalBudget(@RequestHeader String token, @RequestBody AddTotalBudgetArg arg){
         if(arg.isWrongParams()){
@@ -110,7 +103,6 @@ public class BudgetController  {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "更新总预算")
     @RequestMapping(value = "updateTotalBudget", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult updateTotalBudget(@RequestHeader String token, @RequestBody UpdateTotalBudgetArg arg){
         if(arg.isWrongParams()){

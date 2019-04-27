@@ -20,8 +20,6 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
-
-    @ApiOperation(value = "用Code登录")
     @RequestMapping(value = "authorize", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<AuthorizeResult> authorize(@RequestBody AuthorizeArg arg){
         if(arg.isWrongParams()){
@@ -31,7 +29,7 @@ public class AccountController {
         AuthorizeVo vo = BeanUtil.copy(arg, AuthorizeVo.class);
         return accountService.authorize(vo);
     }
-    @ApiOperation(value = "登陆")
+
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult login(@RequestBody LoginArg arg){
         if(arg.isWrongParams()){
@@ -42,7 +40,7 @@ public class AccountController {
         return accountService.login(vo);
     }
 
-    @ApiOperation(value = "注册")
+
     @RequestMapping(value = "register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult register(@RequestBody RegisterArg arg){
         if(arg.isWrongParams()){
@@ -54,7 +52,6 @@ public class AccountController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "修改用户信息")
     @RequestMapping(value = "updateCustomData", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public ModelResult updateCustomData(@RequestHeader String token, @RequestBody UpdateCustomDataArg arg){
         UpdateCustomDataVo vo = BeanUtil.copy(arg, UpdateCustomDataVo.class);
@@ -62,7 +59,6 @@ public class AccountController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "获取用户信息")
     @RequestMapping(value = "queryCustomDataById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult queryCustomDataById(@RequestHeader String token, @RequestBody QueryCustomDataByIdArg arg){
         QueryCustomDataByIdVo vo = BeanUtil.copy(arg, QueryCustomDataByIdVo.class);

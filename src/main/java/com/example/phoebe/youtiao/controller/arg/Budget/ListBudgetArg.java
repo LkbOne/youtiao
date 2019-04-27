@@ -8,10 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 public class ListBudgetArg extends BasePageArg {
 
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    //  @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
 
-    @ApiModelProperty(hidden = true)
+    //  @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         return StringUtils.isBlank(accountBookId);
     }

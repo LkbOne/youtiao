@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class EveryDayExpensesDetailArg extends BaseArg {
 
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    // @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
 
 
-    @ApiModelProperty(name = "recentDay", notes = "前面几天")
+    //  @ApiModelProperty(name = "recentDay", notes = "前面几天")
     Integer recentDay;
 
     public boolean isWrongParams(){

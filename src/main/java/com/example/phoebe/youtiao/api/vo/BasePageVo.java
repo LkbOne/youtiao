@@ -10,11 +10,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class BasePageVo extends BaseArg {
-    // 当前页
-//    @ApiModelProperty("当前页")
+
     private Integer pageNum;
-    // 分页大小
-//    @ApiModelProperty("分页大小")
+
     private Integer pageSize;
 
     public int getOffset() {

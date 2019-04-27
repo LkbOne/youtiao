@@ -26,10 +26,8 @@ public class AccountBookController {
     RedisManager redisManager;
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "添加账本")
     @RequestMapping(value = "addAccountBook", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult addAccountBook(@RequestHeader String token, @RequestBody AddAccountBookArg arg){
-        System.out.println("AddAccountBookArg:" + arg.toString());
         if(arg.isWrongParams()){
             log.warn("AccountBookController.addAccountBook");
             return new ModelResult(SHErrorCode.PARAMS_ERROR);
@@ -39,7 +37,6 @@ public class AccountBookController {
     }
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "更新账本")
     @RequestMapping(value = "updateAccountBook", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public ModelResult updateAccountBook(@RequestHeader String token, @RequestBody UpdateAccountBookArg arg){
         if(arg.isWrongParams()){
@@ -51,7 +48,6 @@ public class AccountBookController {
     }
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "删除账本")
     @RequestMapping(value = "deleteAccountBookById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public ModelResult deleteAccountBookById(@RequestHeader String token, @RequestBody DeleteAccountBookByIdArg arg){
         if(arg.isWrongParams()){
@@ -63,7 +59,6 @@ public class AccountBookController {
     }
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "通过id获得账本详情")
     @RequestMapping(value = "getAccountBookById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<GetAccountBookByIdResult> getAccountBookById(@RequestHeader String token, @RequestBody GetAccountBookByIdArg arg){
         if(arg.isWrongParams()){
@@ -75,7 +70,6 @@ public class AccountBookController {
     }
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "展示所有的账本")
     @RequestMapping(value = "listAccountBook", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<PageResult<ListAccountBookResult>> listAccountBook(@RequestHeader String token, @RequestBody ListAccountBookArg arg){
         System.out.println("arg size:" + arg.getPageSize());
@@ -85,7 +79,6 @@ public class AccountBookController {
     }
 
     @TokenCheckTrigger
-//    @ApiOperation(value = "修改账本的打开历史")
     @RequestMapping(value = "resetOpenHistory", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public ModelResult resetOpenHistory(@RequestHeader String token, @RequestBody ResetOpenHistoryArg arg){
         ResetOpenHistoryVo vo = BeanUtil.copy(arg, ResetOpenHistoryVo.class);

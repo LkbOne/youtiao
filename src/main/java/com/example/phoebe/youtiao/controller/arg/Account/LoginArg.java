@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @Data
 public class LoginArg implements Serializable {
-    @ApiModelProperty(name = "account", notes = "账户")
+//    @ApiModelProperty(name = "account", notes = "账户")
     String account;
-    @ApiModelProperty(name = "password", notes = "密码")
+//    @ApiModelProperty(name = "password", notes = "密码")
     String password;
     public boolean isWrongParams(){
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password)){

@@ -7,10 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class QueryExpensesByIdArg extends BaseArg {
-    @ApiModelProperty(name = "id", notes = "花费id")
+    // @ApiModelProperty(name = "id", notes = "花费id")
     private String id;
 
-    @ApiModelProperty(hidden = true)
+    // @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if (StringUtils.isEmpty(id)){
             return true;

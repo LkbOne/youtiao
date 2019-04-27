@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class DeleteBudgetVo extends BaseArg {
-//    @ApiModelProperty(name = "id", notes = "预算id")
     String id;
 }

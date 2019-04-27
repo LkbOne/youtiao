@@ -7,6 +7,5 @@ import java.io.Serializable;
 
 @Data
 public class QueryBudgetByIdVo extends BaseArg {
-//    @ApiModelProperty(name = "budgetId", notes = "预算id")
     String id;
 }

@@ -37,7 +37,6 @@ public class ExpensesController {
     AccountBookService accountBookService;
 
     @TokenCheckTrigger
-    @ApiOperation(value = "添加花费")
     @RequestMapping(value = "addExpenses", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult addExpenses(@RequestHeader String token, @RequestBody AddExpensesArg arg){
         if(arg.isWrongParams()){
@@ -49,7 +48,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "更新花费")
     @RequestMapping(value = "updateExpenses", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public ModelResult updateExpenses(@RequestHeader String token, @RequestBody UpdateExpensesArg arg){
         if(arg.isWrongParams()){
@@ -61,7 +59,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "删除花费")
     @RequestMapping(value = "deleteExpensesById", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public ModelResult deleteExpensesById(@RequestHeader String token, @RequestBody DeleteExpensesById arg){
         if(arg.isWrongParams()){
@@ -74,7 +71,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "通过id获得花费详情")
     @RequestMapping(value = "QueryExpensesById", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<QueryExpensesByIdResult> getExpensesById(@RequestHeader String token, @RequestBody QueryExpensesByIdArg arg){
         if(arg.isWrongParams()){
@@ -87,7 +83,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "展示所有的花费")
     @RequestMapping(value = "listExpenses", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult listExpenses(@RequestHeader String token, @RequestBody ListExpensesArg arg){
         if(arg.isWrongParams()){
@@ -99,7 +94,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "统计某一个区间内的总支出与总收入")
     @RequestMapping(value = "sumInAndOutExpenses", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     ModelResult<SumInAndOutExpensesResult> sumInAndOutExpenses(@RequestHeader String token, @RequestBody SumInAndOutExpensesArg arg){
         if(arg.isWrongParams()){
@@ -111,7 +105,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "统计所选日期费用")
     @RequestMapping(value = "sumThisDayExpenses", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     ModelResult<SumThisDayExpensesResult> sumThisDayExpenses(@RequestHeader String token, @RequestBody SumThisDayExpensesArg arg){
         if(arg.isWrongParams()){
@@ -122,7 +115,6 @@ public class ExpensesController {
         return expensesService.sumThisDayExpenses(vo);
     }
     @TokenCheckTrigger
-    @ApiOperation(value = "分数组展示每一天的所有费用")
     @RequestMapping(value = "showEveryDayExpensesDetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     ModelResult<List<List<EveryDayExpensesDetailResult>>> showEveryDayExpensesDetail(@RequestHeader String token, @RequestBody EveryDayExpensesDetailArg arg){
         if(arg.isWrongParams()){
@@ -134,7 +126,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "报表的展示")
     @RequestMapping(value = "expensesGroupClassificationByTypeStatistic", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     ModelResult<ExpensesGroupClassificationByTypeStatisticResult> expensesGroupClassificationByTypeStatistic(@RequestHeader String token, @RequestBody ExpensesGroupClassificationByTypeStatisticArg arg){
         if(arg.isWrongParams()){
@@ -146,7 +137,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "展示某区间内的费用（收入，支出，结余）")
     @RequestMapping(value = "showExpensesTrendBetweenIntervalByAccountBookId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     ModelResult<ShowExpensesTreadResult> showExpensesTrendBetweenIntervalByAccountBookId(@RequestHeader String token, @RequestBody ShowExpensesTrendBetweenIntervalByAccountBookIdArg arg){
         if(arg.isWrongParams()){
@@ -158,7 +148,6 @@ public class ExpensesController {
     }
 
     @TokenCheckTrigger
-    @ApiOperation(value = "导出excel， 月或这年报表")
     @RequestMapping(value = "exportExcel", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     void exportExcel(@RequestParam("accountBookId") String accountBookId, @RequestParam("interval") String interval, @RequestParam("date") String date, HttpServletResponse httpServletResponse) throws Exception {
         ExportExcelArg arg = new ExportExcelArg();

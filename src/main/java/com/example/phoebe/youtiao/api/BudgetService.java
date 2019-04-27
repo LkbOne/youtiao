@@ -7,7 +7,7 @@ import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.PageResult;
 
 public interface BudgetService {
-    ModelResult addBudget(AddbudgetVo vo);
+    ModelResult addBudget(AddBudgetVo vo);
 
     ModelResult updateBudget(UpdateBudgetVo vo);
 

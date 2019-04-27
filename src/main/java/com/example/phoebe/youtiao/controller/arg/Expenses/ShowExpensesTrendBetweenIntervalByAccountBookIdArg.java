@@ -10,17 +10,17 @@ import java.util.Date;
 @Data
 public class ShowExpensesTrendBetweenIntervalByAccountBookIdArg implements Serializable {
 
-    @ApiModelProperty(name = "accountBookId", notes = "账本id")
+    // @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
     /**
      *  year 1 month 2 day 3
      */
 
-    @ApiModelProperty(name = "interval", notes = "year 1 month 2 day 3")
+    // @ApiModelProperty(name = "interval", notes = "year 1 month 2 day 3")
     Integer interval;
 
 
-    @ApiModelProperty(name = "date", notes = "interval为1的时候，计算年，为2的时候计算月")
+    //  @ApiModelProperty(name = "date", notes = "interval为1的时候，计算年，为2的时候计算月")
     Date date;
 
     public boolean isWrongParams(){

@@ -45,7 +45,7 @@ public class BudgetServiceImpl implements BudgetService {
     BudgetManager budgetManager;
 
     @Override
-    public ModelResult addBudget(AddbudgetVo vo) {
+    public ModelResult addBudget(AddBudgetVo vo) {
         AccountBookEntity accountBookEntity = accountBookDao.queryAccountBookById(vo.getAccountBookId());
         if (null == accountBookEntity) {
             log.warn("BudgetServiceImpl.addBudget");
