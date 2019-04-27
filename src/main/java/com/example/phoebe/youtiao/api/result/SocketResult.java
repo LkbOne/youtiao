@@ -8,12 +8,4 @@ import java.io.Serializable;
 public class SocketResult implements Serializable {
     String message;
     int type;
-
-//    @Override
-//    public String toString(){
-//        return "{" +
-//                    "message:" + message  + "," +
-//                    "type" +":"+ String.valueOf(type) +
-//                "}";
-//    }
 }

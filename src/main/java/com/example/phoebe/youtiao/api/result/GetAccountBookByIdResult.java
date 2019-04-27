@@ -14,10 +14,7 @@ public class GetAccountBookByIdResult implements Serializable {
     Integer color;
     Integer status;
     String totalBudgetId;
-    @ApiModelProperty(name = "剩余总预算金额")
     Float leftBudgetMoney;
-    @ApiModelProperty(name = "提醒金额")
     Float warnMoney;
-    @ApiModelProperty(name = "修改历史", notes = "1为这一次打开， 0为正常状态")
     Integer openHistory;
 }
