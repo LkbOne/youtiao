@@ -1,20 +1,13 @@
 package com.example.phoebe.youtiao.controller;
 
 import com.example.phoebe.youtiao.api.AccountService;
-import com.example.phoebe.youtiao.api.result.LoginResult;
-import com.example.phoebe.youtiao.api.result.RegisterResult;
-import com.example.phoebe.youtiao.api.vo.account.LoginVo;
-import com.example.phoebe.youtiao.api.vo.account.QueryCustomDataByIdVo;
-import com.example.phoebe.youtiao.api.vo.account.RegisterVo;
-import com.example.phoebe.youtiao.api.vo.account.UpdateCustomDataVo;
+import com.example.phoebe.youtiao.api.result.AuthorizeResult;
+import com.example.phoebe.youtiao.api.vo.account.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
-import com.example.phoebe.youtiao.controller.arg.Account.LoginArg;
-import com.example.phoebe.youtiao.controller.arg.Account.QueryCustomDataByIdArg;
-import com.example.phoebe.youtiao.controller.arg.Account.RegisterArg;
-import com.example.phoebe.youtiao.controller.arg.Account.UpdateCustomDataArg;
+import com.example.phoebe.youtiao.controller.arg.Account.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +21,19 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    @ApiOperation(value = "用Code登录")
+    @RequestMapping(value = "authorize", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ModelResult<AuthorizeResult> authorize(@RequestBody AuthorizeArg arg){
+        if(arg.isWrongParams()){
+            log.warn("AccountController.authorize params error arg:{}", arg);
+            return new ModelResult<>(SHErrorCode.PARAMS_ERROR);
+        }
+        AuthorizeVo vo = BeanUtil.copy(arg, AuthorizeVo.class);
+        return accountService.authorize(vo);
+    }
     @ApiOperation(value = "登陆")
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ModelResult<LoginResult> login(@RequestBody LoginArg arg){
+    public ModelResult login(@RequestBody LoginArg arg){
         if(arg.isWrongParams()){
             log.warn("AccountController.login params error arg:{}", arg);
             return new ModelResult<>(SHErrorCode.PARAMS_ERROR);

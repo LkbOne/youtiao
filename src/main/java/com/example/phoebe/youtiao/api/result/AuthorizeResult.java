@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class LoginResult implements Serializable {
+public class AuthorizeResult implements Serializable {
     @ApiModelProperty(name = "token", notes = "返回的token")
     String token;
     @ApiModelProperty(name = "accountId", notes = "用户id")

@@ -21,7 +21,7 @@ public class AddbudgetVo extends BaseArg {
     @ApiModelProperty(name = "endTime", notes = "结束时间")
     Date endTime;
 
-    @ApiModelProperty(name = "warmMoney", notes = "提示金额")
+    @ApiModelProperty(name = "warnMoney", notes = "提示金额")
     Float warnMoney;
 
     @ApiModelProperty(name = "classification", notes = "分类")

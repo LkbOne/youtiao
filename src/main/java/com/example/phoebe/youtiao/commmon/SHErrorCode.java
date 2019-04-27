@@ -23,7 +23,8 @@ public enum SHErrorCode {
 	UPDATE_FAIL(-15, "更新失败"),
 	DEL_FAIL(-16, "删除失败"),
 	USER_ACCOUNT_NOT_EXIST(-17, "用户不存在"),
-	USER_ACCOUNT_EXISTED(-17, "用户已经存在"),
+	USER_ACCOUNT_EXISTED(-18, "用户已经存在"),
+	CHANGE_PASSWORD_FAIL(-19, "修改密码失败"),
 
 	// 預算
 
@@ -47,8 +48,12 @@ public enum SHErrorCode {
 	CHECK_LOGIN_PHONE_MESSAGE_FAILED(2002, "验证码错误"),
 	LOGIN_BLACK_LIST(2003, "本账号已被禁用"),
 	REGISTER_NEED_AGAIN(2004, "需要重新注册"),
-	LOGIN_FAIL(2005, "登录失败")
+	LOGIN_FAIL(2005, "登录失败"),
 
+
+	// 图片
+	TRANSFER_TPATH_FAIL(2800,"获取TPath失败"),
+	TRANSFER_FPATH_FAIL(2801,"获取FPath失败");
 	;
 
 

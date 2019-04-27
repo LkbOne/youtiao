@@ -1,21 +1,16 @@
 package com.example.phoebe.youtiao.service.impl;
 
 import com.example.phoebe.youtiao.api.AccountService;
-import com.example.phoebe.youtiao.api.result.LoginResult;
+import com.example.phoebe.youtiao.api.result.AuthorizeResult;
 import com.example.phoebe.youtiao.api.result.QueryCustomDataByIdResult;
 import com.example.phoebe.youtiao.api.result.RegisterResult;
-import com.example.phoebe.youtiao.api.vo.account.LoginVo;
-import com.example.phoebe.youtiao.api.vo.account.QueryCustomDataByIdVo;
-import com.example.phoebe.youtiao.api.vo.account.RegisterVo;
-import com.example.phoebe.youtiao.api.vo.account.UpdateCustomDataVo;
+import com.example.phoebe.youtiao.api.vo.account.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.model.RedisLoginEntity;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
-import com.example.phoebe.youtiao.commmon.util.RedisUtil;
 import com.example.phoebe.youtiao.commmon.util.TokenUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
-import com.example.phoebe.youtiao.controller.arg.Account.UpdateCustomDataArg;
 import com.example.phoebe.youtiao.dao.api.AccountDao;
 import com.example.phoebe.youtiao.dao.api.WxAccountDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
@@ -23,14 +18,13 @@ import com.example.phoebe.youtiao.dao.entity.AccountEntity;
 import com.example.phoebe.youtiao.dao.entity.WxAccountEntity;
 import com.example.phoebe.youtiao.service.manager.AccountBookManager;
 import com.example.phoebe.youtiao.service.manager.AccountManager;
+import com.example.phoebe.youtiao.service.manager.QiNiuManager;
 import com.example.phoebe.youtiao.service.manager.RedisManager;
 import com.google.gson.Gson;
-import com.sun.tools.internal.ws.processor.modeler.Modeler;
-import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,13 +46,16 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountBookManager accountBookManager;
 
+    @Autowired
+    QiNiuManager qiNiuManager;
+
     Gson gs = new Gson();
 
     @Override
-    public ModelResult<LoginResult> login(LoginVo vo) {
+    public ModelResult<AuthorizeResult> authorize(AuthorizeVo vo) {
         AccountManager.WxAuth wxAuth = accountManager.getWxSession(vo.getCode());
         if(wxAuth == null || wxAuth.getOpenid() == null){
-            log.warn("AccountServiceImpl.login get openid by code fail code:{} ", vo.getCode());
+            log.warn("AccountServiceImpl.authorize get openid by code fail code:{} ", vo.getCode());
             return new ModelResult<>(SHErrorCode.WX_USER_NOFOUND);
         }
 
@@ -67,15 +64,15 @@ public class AccountServiceImpl implements AccountService {
             existWxAccountEntity.setWxName(vo.getWxName());
             existWxAccountEntity.setAvatarUrl(vo.getAvatarUrl());
             if (wxAccountDao.updateWxAccount(existWxAccountEntity) != 1) {
-                log.warn("AccountServiceImpl.login update WxAccount fail existWxAccountEntity:{}", existWxAccountEntity);
+                log.warn("AccountServiceImpl.authorize update WxAccount fail existWxAccountEntity:{}", existWxAccountEntity);
                 return new ModelResult<>(SHErrorCode.LOGIN_NEED_RELOGIN);
             }
 
             String token = doInitToken(wxAuth, existWxAccountEntity.getAccountId());
 
-            LoginResult result = new LoginResult();
+            AuthorizeResult result = new AuthorizeResult();
             if (StringUtils.isBlank(token)) {
-                log.warn("AccountServiceImpl.login token is empty  wxAuth:{} existWxAccountEntity:{}", wxAuth, existWxAccountEntity);
+                log.warn("AccountServiceImpl.authorize token is empty  wxAuth:{} existWxAccountEntity:{}", wxAuth, existWxAccountEntity);
                 return new ModelResult<>(SHErrorCode.LOGIN_NEED_RELOGIN);
             }
 
@@ -112,7 +109,11 @@ public class AccountServiceImpl implements AccountService {
         }
 
         String accountId = UUIDUtil.getUUID();
-        AccountEntity accountEntity = new AccountEntity();
+        AccountEntity accountEntity = BeanUtil.copy(vo, AccountEntity.class);
+
+
+        String fPath = qiNiuManager.changeQiNiuFileName(vo.getAvatarTPath());
+        accountEntity.setAvatarFPath(fPath);
         accountEntity.setId(accountId);
         accountEntity.setStatus(0);
         String token = doInitToken(wxAuth, accountId);
@@ -142,7 +143,7 @@ public class AccountServiceImpl implements AccountService {
         accountBookEntity.setAid(accountId);
         accountBookEntity.setStatus(1);
         if(!accountBookManager.addAccountBook(accountBookEntity)){
-            log.warn("AccountServiceImpl.login insert account book fail accountBookEntity:{}", accountBookEntity);
+            log.warn("AccountServiceImpl.authorize insert account book fail accountBookEntity:{}", accountBookEntity);
             return new ModelResult<>(SHErrorCode.REGISTER_NEED_AGAIN);
         }
         RegisterResult result = new RegisterResult();
@@ -153,15 +154,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public ModelResult login(LoginVo vo) {
+        int userCount = accountDao.queryAccountByAccountAndPassword(vo.getAccount(),
+                vo.getPassword());
+
+        if(userCount == 0){
+            return new ModelResult(SHErrorCode.LOGIN_FAIL);
+        }
+
+        return new ModelResult(SHErrorCode.SUCCESS);
+    }
+
+    @Override
     public ModelResult UpdateCustomData(UpdateCustomDataVo vo){
         AccountEntity entity = accountDao.queryAccountById(vo.getAccountId());
         if(null == entity){
             log.warn("AccountServiceImpl.UpdateCustomData entity is empty vo:{}", vo);
             return new ModelResult(SHErrorCode.USER_ACCOUNT_NOT_EXIST);
         }
-        AccountEntity updateEntity = BeanUtil.copy(vo, AccountEntity.class);
-        updateEntity.setId(vo.getAccountId());
-        accountDao.updateAccount(updateEntity);
+        if(accountDao.queryAccountByAccountAndPassword(entity.getAccount(), vo.getPassword()) == 0){
+            return new ModelResult(SHErrorCode.CHANGE_PASSWORD_FAIL);
+        }
+        if(vo.getPath().startsWith("TE")){
+            String fPath = qiNiuManager.changeQiNiuFileName(vo.getPath());
+            if(StringUtils.isEmpty(fPath)){
+                log.warn("AccountServiceImpl.UpdateCustomData fPath:{}", fPath);
+                return new ModelResult(SHErrorCode.UPDATE_FAIL);
+            }
+            if(!qiNiuManager.deleteFile(entity.getAvatarFPath())){
+                log.warn("AccountServiceImpl.UpdateCustomData fPath:{}, " +
+                        "entity.getAvatarFPath:{}", fPath, entity.getAvatarFPath());
+                return new ModelResult(SHErrorCode.UPDATE_FAIL);
+            }
+            entity.setAvatarFPath(fPath);
+        }
+
+        entity.setPassword(vo.getNewPassword());
+        entity.setName(vo.getName());
+        entity.setRealName(vo.getRealName());
+        entity.setPhone(vo.getPhone());
+        entity.setSignature(vo.getSignature());
+        accountDao.updateAccount(entity);
         return ModelResult.newSuccess();
     }
     @Override

@@ -3,9 +3,11 @@ package com.example.phoebe.youtiao.service.impl;
 import com.example.phoebe.youtiao.api.ClockService;
 import com.example.phoebe.youtiao.api.result.ClockResult;
 import com.example.phoebe.youtiao.api.result.ListClockResult;
+import com.example.phoebe.youtiao.api.result.SocketResult;
 import com.example.phoebe.youtiao.api.vo.clock.*;
 import com.example.phoebe.youtiao.commmon.ModelResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
+import com.example.phoebe.youtiao.commmon.enums.SocketEnum;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.commmon.util.DateUtil;
 import com.example.phoebe.youtiao.commmon.util.UUIDUtil;
@@ -104,7 +106,7 @@ public class ClockServiceImpl implements ClockService {
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }
 
-//    @Scheduled(cron = "0/2 * * * * ?")
+    @Scheduled(cron = "0/2 * * * * ?")
     @Override
     public void searchClock2Call() {
         List<ClockEntity> clockList = clockDao.listClockByStatus(0);
@@ -121,13 +123,15 @@ public class ClockServiceImpl implements ClockService {
                         // 还有月份没有实现
                         continue;
                     }
-
-                    if(WebSocketServer.sendInfo(clock.getId(), clock.getAid())){
+                    SocketResult result = new SocketResult();
+                    result.setMessage(clock.getId());
+                    result.setType(SocketEnum.CLOCK_ID.getType());
+                    if(!WebSocketServer.sendInfo(result, clock.getAid())){
                         AccountEntity accountEntity = accountDao.queryAccountById(clock.getAid());
                         smsManager.sendSMS(accountEntity.getPhone(), DateUtil.minuteformat(clock.getTime()), clock.getName());
-                        clock.setTime(new Date(time));
-                        clockDao.updateClock(clock);
                     }
+                    clock.setTime(new Date(time));
+                    clockDao.updateClock(clock);
                 }
             }
         } catch (IOException e) {

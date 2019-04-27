@@ -65,7 +65,7 @@
     <select id="listClock" parameterType="map" resultMap="BaseResultMap">
         SELECT *
         FROM clock
-        WHERE aid = #{aid}
+        WHERE aid = #{uid}
     </select>
 
     <delete id="deleteClockById" parameterType="map">

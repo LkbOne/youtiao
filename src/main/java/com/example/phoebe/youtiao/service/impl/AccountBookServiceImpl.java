@@ -9,6 +9,7 @@ import com.example.phoebe.youtiao.commmon.PageResult;
 import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.dao.api.AccountBookDao;
+import com.example.phoebe.youtiao.dao.api.ExpensesDao;
 import com.example.phoebe.youtiao.dao.api.TotalBudgetDao;
 import com.example.phoebe.youtiao.dao.entity.AccountBookEntity;
 import com.example.phoebe.youtiao.dao.entity.TotalBudgetEntity;
@@ -30,6 +31,9 @@ public class AccountBookServiceImpl implements AccountBookService {
 
     @Autowired
     TotalBudgetDao totalBudgetDao;
+
+    @Autowired
+    ExpensesDao expensesDao;
     @Override
     public ModelResult addAccountBook(AddAccountBookVo vo) {
         AccountBookEntity accountBookEntity = BeanUtil.copy(vo, AccountBookEntity.class);
@@ -75,13 +79,14 @@ public class AccountBookServiceImpl implements AccountBookService {
             return new ModelResult<>(SHErrorCode.NO_DATA);
         }
         GetAccountBookByIdResult result = BeanUtil.copy(accountBookEntity, GetAccountBookByIdResult.class);
-        result.setCreateTime(accountBookEntity.getCreateTime().getTime());
-        result.setLastModifyTime(accountBookEntity.getLastModifyTime().getTime());
-
         TotalBudgetEntity totalBudget = totalBudgetDao.queryTotalBudgetByAccountBookId(vo.getId());
         if(totalBudget != null) {
             result.setTotalBudgetId(totalBudget.getId());
-            result.setTotalBudgetMoney(totalBudget.getTotalBudget());
+            Float totalOutExpenses = expensesDao.sumExpenses(accountBookEntity.getId(),
+                    1, null, totalBudget.getBeginTime(),
+                    totalBudget.getEndTime());
+            result.setWarnMoney(totalBudget.getWarnMoney());
+            result.setLeftBudgetMoney(totalBudget.getTotalBudget() - (totalOutExpenses == null ? 0 : totalOutExpenses));
         }
         return new ModelResult<>(SHErrorCode.SUCCESS, result);
     }

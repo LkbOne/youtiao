@@ -17,4 +17,8 @@ public class QueryCustomDataByIdResult implements Serializable {
     String phone;
     @ApiModelProperty(name = "signature", notes = "签名")
     String signature;
+    @ApiModelProperty(name = "avatarFPath", notes = "头像永久PATH")
+    String avatarFPath;
+    @ApiModelProperty(name = "account", notes = "账号")
+    String account;
 }

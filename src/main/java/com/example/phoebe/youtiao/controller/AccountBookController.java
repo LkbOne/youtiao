@@ -24,10 +24,8 @@ public class AccountBookController {
     @Autowired
     AccountBookService accountBookService;
 
-
     @Autowired
     RedisManager redisManager;
-
 
     @TokenCheckTrigger
     @ApiOperation(value = "添加账本")

@@ -9,6 +9,7 @@ import java.util.Date;
 public class AccountEntity implements Serializable {
     String id;
     String account;
+    String password;
     Integer status;
     String openHistory;
     Date createTime;
@@ -17,4 +18,6 @@ public class AccountEntity implements Serializable {
     String realName;
     String signature;
     String phone;
+    String avatarFPath;
+
 }

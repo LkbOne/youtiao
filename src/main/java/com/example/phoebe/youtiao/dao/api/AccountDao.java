@@ -14,4 +14,7 @@ public interface AccountDao {
     int deleteAccountById(@Param("id") String id);
 
     AccountEntity queryAccountById(@Param("id") String id);
+
+    int queryAccountByAccountAndPassword(@Param("account") String account,
+                                        @Param("password") String password);
 }
