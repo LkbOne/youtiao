@@ -8,7 +8,6 @@ import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.controller.arg.Account.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +19,12 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+    @RequestMapping(value = "hello", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public ModelResult hello(){
+        return new ModelResult(SHErrorCode.SUCCESS);
+    }
+
     @RequestMapping(value = "authorize", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult<AuthorizeResult> authorize(@RequestBody AuthorizeArg arg){
         if(arg.isWrongParams()){

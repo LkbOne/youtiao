@@ -98,4 +98,11 @@
         DELETE FROM account WHERE id=#{id}
     </delete>
 
+    <select id="countAccountByAccount" parameterType="map" resultType="Integer">
+        SELECT count(*)
+        FROM account
+        WHERE account = #{account}
+    </select>
+
+
 </mapper>

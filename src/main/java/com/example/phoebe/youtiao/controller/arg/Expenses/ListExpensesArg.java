@@ -3,10 +3,12 @@ package com.example.phoebe.youtiao.controller.arg.Expenses;
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
 import com.example.phoebe.youtiao.controller.arg.BasePageArg;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ListExpensesArg extends BasePageArg {
 //    @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;

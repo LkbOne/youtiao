@@ -1,13 +1,13 @@
 package com.example.phoebe.youtiao.api.vo.budget;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class UpdateBudgetVo extends BaseArg {
     String id;
 

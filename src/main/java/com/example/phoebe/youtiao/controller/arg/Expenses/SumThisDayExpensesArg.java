@@ -2,18 +2,16 @@ package com.example.phoebe.youtiao.controller.arg.Expenses;
 
 import com.example.phoebe.youtiao.controller.arg.BasePageArg;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Date;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SumThisDayExpensesArg extends BasePageArg {
-//    @ApiModelProperty(name = "accountBookId", notes = "账本id")
     String accountBookId;
-//    @ApiModelProperty(name = "searchDay", notes = "查询当天的日期")
     Date searchDay;
-
-//    @ApiModelProperty(hidden = true)
     public boolean isWrongParams(){
         if(StringUtils.isEmpty(accountBookId)){
             return true;

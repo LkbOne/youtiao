@@ -21,7 +21,6 @@ import com.example.phoebe.youtiao.service.manager.AccountManager;
 import com.example.phoebe.youtiao.service.manager.QiNiuManager;
 import com.example.phoebe.youtiao.service.manager.RedisManager;
 import com.google.gson.Gson;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +105,11 @@ public class AccountServiceImpl implements AccountService {
         if(existWxAccountEntity != null){
             log.warn("AccountServiceImpl.register get openid by code fail code:{} ", vo.getCode());
             return new ModelResult<>(SHErrorCode.USER_ACCOUNT_EXISTED);
+        }
+
+        if(accountDao.countAccountByAccount(vo.getAccount()) == 1){
+            log.warn("AccountServiceImpl.register account existed account:{} ", vo.getAccount());
+            return new ModelResult<>(SHErrorCode.ACCOUNT_EXIST);
         }
 
         String accountId = UUIDUtil.getUUID();

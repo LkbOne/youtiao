@@ -2,9 +2,11 @@ package com.example.phoebe.youtiao.controller.arg.Clock;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class DeleteClockArg extends BaseArg {
     String id;
     public boolean isWrongParams(){

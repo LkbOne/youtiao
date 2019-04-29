@@ -1,9 +1,11 @@
 package com.example.phoebe.youtiao.controller.arg;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+
 @Data
-//@ApiModel
+@EqualsAndHashCode(callSuper = false)
 public class AddAccountBookArg extends BaseArg {
 
 //    @ApiModelProperty(name = "name", notes = "名字")

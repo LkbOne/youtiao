@@ -1,13 +1,13 @@
 package com.example.phoebe.youtiao.controller.arg.Account;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class AuthorizeArg extends BaseArg {
     String code;
 

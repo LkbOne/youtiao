@@ -17,4 +17,6 @@ public interface AccountDao {
 
     int queryAccountByAccountAndPassword(@Param("account") String account,
                                         @Param("password") String password);
+
+    int countAccountByAccount(@Param("account") String account);
 }

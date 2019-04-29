@@ -1,6 +1,4 @@
 package com.example.phoebe.youtiao.api.vo.account;
-
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;

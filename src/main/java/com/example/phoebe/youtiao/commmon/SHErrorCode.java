@@ -25,6 +25,7 @@ public enum SHErrorCode {
 	USER_ACCOUNT_NOT_EXIST(-17, "用户不存在"),
 	USER_ACCOUNT_EXISTED(-18, "用户已经存在"),
 	CHANGE_PASSWORD_FAIL(-19, "修改密码失败"),
+	ACCOUNT_EXIST(-20, "账户已存在"),
 
 	// 預算
 

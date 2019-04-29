@@ -1,6 +1,4 @@
 package com.example.phoebe.youtiao.controller.arg.Expenses;
-
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import java.io.Serializable;

@@ -1,7 +1,6 @@
 package com.example.phoebe.youtiao.controller.arg.Clock;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 

@@ -9,7 +9,6 @@ import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.controller.arg.DownLoadArg;
 import com.example.phoebe.youtiao.controller.arg.GetFPathArg;
 import com.example.phoebe.youtiao.controller.arg.GetTPathArg;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

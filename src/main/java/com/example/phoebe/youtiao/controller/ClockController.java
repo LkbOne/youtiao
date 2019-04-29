@@ -8,7 +8,6 @@ import com.example.phoebe.youtiao.commmon.SHErrorCode;
 import com.example.phoebe.youtiao.commmon.annotion.TokenCheckTrigger;
 import com.example.phoebe.youtiao.commmon.util.BeanUtil;
 import com.example.phoebe.youtiao.controller.arg.Clock.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

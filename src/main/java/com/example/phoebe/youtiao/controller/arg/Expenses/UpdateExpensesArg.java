@@ -1,14 +1,14 @@
 package com.example.phoebe.youtiao.controller.arg.Expenses;
 
 import com.example.phoebe.youtiao.controller.arg.BaseArg;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class UpdateExpensesArg extends BaseArg {
     //  @ApiModelProperty(name = "id", notes = "id")
     String id;
