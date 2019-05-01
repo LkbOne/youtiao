@@ -26,7 +26,7 @@ public enum SHErrorCode {
 	USER_ACCOUNT_EXISTED(-18, "用户已经存在"),
 	CHANGE_PASSWORD_FAIL(-19, "修改密码失败"),
 	ACCOUNT_EXIST(-20, "账户已存在"),
-
+	NEED_REGISTER(-21, "需要注册"),
 	// 預算
 
 	MORE_THAN_TOTAL_BUDGET(101, "预算金额超過总预算"),

@@ -78,8 +78,9 @@ public class AccountServiceImpl implements AccountService {
             result.setToken(doInitToken(wxAuth, existWxAccountEntity.getAccountId()));
             result.setAccountId(existWxAccountEntity.getAccountId());
             return new ModelResult<>(SHErrorCode.SUCCESS, result);
+        }else{
+            return new ModelResult<>(SHErrorCode.NEED_REGISTER);
         }
-        return new ModelResult<>(SHErrorCode.LOGIN_FAIL);
     }
 
     private String doInitToken(AccountManager.WxAuth wxAuth, String accountId){

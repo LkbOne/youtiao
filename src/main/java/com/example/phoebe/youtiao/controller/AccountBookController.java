@@ -22,9 +22,6 @@ public class AccountBookController {
     @Autowired
     AccountBookService accountBookService;
 
-    @Autowired
-    RedisManager redisManager;
-
     @TokenCheckTrigger
     @RequestMapping(value = "addAccountBook", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ModelResult addAccountBook(@RequestHeader String token, @RequestBody AddAccountBookArg arg){

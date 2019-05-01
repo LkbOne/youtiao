@@ -152,8 +152,6 @@ public class ExpensesController {
         ExportExcelArg arg = new ExportExcelArg();
         arg.setAccountBookId(accountBookId);
         arg.setDate(new Date(Long.valueOf(date)));
-//        arg.setDate(date);
-//        arg.setInterval(Integer.valueOf(interval));
         arg.setInterval(Integer.valueOf(interval));
         if(arg.isWrongParams()){
             log.warn("ExpensesController.exportExcel params error arg:{}", arg);

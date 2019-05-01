@@ -30,8 +30,6 @@ public class AccountManager {
 
         try {
             String answear= response.getResponseBody();
-//            System.out.println("url:" + url);
-//            System.out.println("answear:" + answear);
             return gs.fromJson(answear, WxAuth.class);
         } catch (IOException e) {
             e.printStackTrace();
